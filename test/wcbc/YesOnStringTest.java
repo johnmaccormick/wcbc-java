@@ -13,8 +13,8 @@ class YesOnStringTest {
 		String[][] testVals = {
 		        {"containsGAGA.java", "TTTTGAGATT", "yes"},
 		        {"containsGAGA.java", "TTTTGAGTT", "no"},
-//		        {"isEmpty.java", "", "yes"},
-//		        {"isEmpty.java", "x", "no"},
+		        {"isEmpty.java", "", "yes"},
+		        {"isEmpty.java", "x", "no"},
 		    };
 		YesOnString yesOnString = new YesOnString();
 

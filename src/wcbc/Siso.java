@@ -19,6 +19,7 @@ public interface Siso {
 	 *            Input to the SISO function: "inString" is an abbreviation of
 	 *            "input string."
 	 * @return The result computed by the SISO function.
+	 * @throws WcbcException 
 	 */
-	String siso(String inString);
+	String siso(String inString) throws WcbcException;
 }
