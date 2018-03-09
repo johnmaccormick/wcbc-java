@@ -1,0 +1,7 @@
+execute universal program Temp:
+
+c:\Users\jmac\eclipse-workspace\wcbc>java -cp "bin;C:\Program Files\Java\jdk1.8.0_161\lib\tools.jar;lib\*"  wcbc.Temp
+
+
+jmac@jmac-tablet MSYS ~/eclipse-workspace/wcbc
+$ java -cp bin wcbc/Universal -f containsGAGA.java CCGAGACC
