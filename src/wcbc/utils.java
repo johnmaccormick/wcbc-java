@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,6 +15,12 @@ import java.util.regex.Pattern;
  *
  */
 public class utils {
+
+	/**
+	 * A random number generator that can be used by all functions that want one.
+	 */
+	public static Random aRandom = new Random();
+
 	/**
 	 * Read a file, returning its contents as a single string.
 	 * 
@@ -182,7 +189,28 @@ public class utils {
 		return inStrings;
 	}
 
+    public static final String alphanumericChars = "abcdefghijklmnopqstuvwxyzABCDEFGHIJKLMNOPQSTUVWXYZ0123456789";
+    public static final int numAlphanumericChars = utils.alphanumericChars.length();
+
+    public static String randomLenAlphanumericString(int maxLength) {
+		int length = aRandom.nextInt(maxLength);
+		return randomAlphanumericString(length);
+		
+	}
     
+    public static String randomAlphanumericString(int length) {
+		StringBuilder b = new StringBuilder();
+		for(int i=0; i<length; i++) {
+			b.append(utils.alphanumericChars.charAt(aRandom.nextInt(numAlphanumericChars)));
+		}
+		return b.toString();
+	}
+    
+    public static String randomLenAlphanumericString() {
+		return randomLenAlphanumericString(20);
+		
+	}
+
 	public static void main(String[] args) throws IOException, WcbcException {
 		// String[] c = {"abc", "def", "ghi"};
 		// ArrayList<String> cArr = new ArrayList<>(Arrays.asList(c));
@@ -191,19 +219,23 @@ public class utils {
 		// System.out.println(d);
 		// System.out.println(e);
 
-
-        // String progString =
+		// String progString =
 		// utils.readFile(utils.prependWcbcPath("containsGAGA.java"));
 		// // String progString = "asdf\npublic class foo";
 		// String val = utils.extractClassName(progString);
 		// System.out.println(val);
 
-        String a = "abc";
-		String b = "defg";
-		String c = utils.ESS(a, b);
-		String[] d = utils.DESS(c);
-		System.out.println(c);
-		System.out.println(d[0]);
-		System.out.println(d[1]);
+//		String a = "abc";
+//		String b = "defg";
+//		String c = utils.ESS(a, b);
+//		String[] d = utils.DESS(c);
+//		System.out.println(c);
+//		System.out.println(d[0]);
+//		System.out.println(d[1]);
+		
+		for(int i=0; i<10; i++) {
+			System.out.println(utils.randomLenAlphanumericString());
+		}
+		
 	}
 }

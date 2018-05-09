@@ -37,7 +37,14 @@ class utilsTest {
 
 	@Test
 	void ESSandDESS() throws IOException, WcbcException {
-		fail("not implemented");
+		for(int i=0; i<100; i++) {
+			String inString1 = utils.randomLenAlphanumericString();
+			String inString2 = utils.randomLenAlphanumericString();
+			String combined = utils.ESS(inString1, inString2);
+			String[] components = utils.DESS(combined);
+			assertEquals(inString1, components[0]);
+			assertEquals(inString2, components[1]);
+		}
 	}
 
 }
