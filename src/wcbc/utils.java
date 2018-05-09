@@ -3,6 +3,9 @@ package wcbc;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -99,10 +102,43 @@ public class utils {
 		return fullName;
 	}
 
+	public static String join(Collection<String> c) {
+		return join(c, "");
+	}
+
+	/**
+	 * Join all elements of a string collection together with a specified piece of
+	 * glue between each element.
+	 * 
+	 * @param c
+	 *            collection of strings to be joined together
+	 * @param glue
+	 *            string to be inserted between each item in the collection
+	 * @return string of all items joined together with the specified glue between
+	 *         each item
+	 */
+	public static String join(Collection<String> c, String glue) {
+		StringBuilder sb = new StringBuilder();
+		for (String s : c) {
+			sb.append(s);
+			sb.append(glue);
+		}
+		// remove the last piece of glue, if it exists
+		int end;
+		if (c.size() > 0) {
+			end = sb.length() - glue.length();
+		} else {
+			end = sb.length();
+		}
+		return sb.substring(0, end);
+	}
+
 	public static void main(String[] args) throws IOException, WcbcException {
-//		String progString = utils.readFile(utils.prependWcbcPath("containsGAGA.java"));
-//		// String progString = "asdf\npublic class foo";
-//		String val = utils.extractClassName(progString);
-//		System.out.println(val);
+		String[] c = {"abc", "def", "ghi"};
+		ArrayList<String> cArr = new ArrayList<>(Arrays.asList(c));
+		String d = utils.join(cArr);
+		String e = utils.join(cArr, "\n");
+		System.out.println(d);
+		System.out.println(e);
 	}
 }
