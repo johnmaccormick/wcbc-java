@@ -99,10 +99,67 @@ public class utils {
 		return fullName;
 	}
 
+	/**
+	 * 
+	 * Encode two strings as a single string.
+	 * 
+	 * ESS is an acronym for Encode as Single String. This function uses the
+	 * encoding method suggested in the textbook: the encoding consists of the
+	 * length of the first string, followed by a space character, followed by the
+	 * two strings concatenated together.
+	 * 
+	 * @param inString1
+	 *            The first string to be encoded
+	 * @param inString2
+	 *            The second string to be encoded
+	 * @return A single string encoding inString1 and inString2
+	 */
+	public static String ESS(String inString1, String inString2) {
+		StringBuilder b = new StringBuilder();
+		b.append(Integer.toString(inString1.length()));
+		b.append(" ");
+		b.append(inString1);
+		b.append(inString2);
+		return b.toString();
+	}
+
+	/**
+	 * Decode a single string into two strings (inverse of ESS).
+	 * 
+	 * DESS is an acronym for DEcode from Single String. This function uses the
+	 * method suggested in the textbook for converting a single string that encodes
+	 * two strings back into the original two strings. DESS is the inverse of the
+	 * function ESS.
+	 * 
+	 * 
+	 * @param inString
+	 *            The string to be decoded
+	 * @return A 2-element array containing the two strings that were decoded from
+	 *         the input.
+	 */
+	public static String[] DESS(String inString) {
+		String[] components = inString.split(" ", 2);
+		String theLengthStr = components[0];
+		String remainder = components[1];
+		int theLength = Integer.parseInt(theLengthStr);
+		String inString1 = remainder.substring(0, theLength);
+		String inString2 = remainder.substring(theLength);
+		String[] inStrings = { inString1, inString2 };
+		return inStrings;
+	}
+
 	public static void main(String[] args) throws IOException, WcbcException {
-//		String progString = utils.readFile(utils.prependWcbcPath("containsGAGA.java"));
-//		// String progString = "asdf\npublic class foo";
-//		String val = utils.extractClassName(progString);
-//		System.out.println(val);
+		// String progString =
+		// utils.readFile(utils.prependWcbcPath("containsGAGA.java"));
+		// // String progString = "asdf\npublic class foo";
+		// String val = utils.extractClassName(progString);
+		// System.out.println(val);
+		String a = "abc";
+		String b = "defg";
+		String c = utils.ESS(a, b);
+		String[] d = utils.DESS(c);
+		System.out.println(c);
+		System.out.println(d[0]);
+		System.out.println(d[1]);
 	}
 }
