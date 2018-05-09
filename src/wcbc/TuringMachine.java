@@ -142,6 +142,12 @@ public class TuringMachine {
 	 */
 	private String state = null;
 
+	// todo
+	private int steps = 0;
+
+	// todo
+	private boolean halted = false;
+
 	/**
 	 * @param description
 	 *            A string describing the states and transitions of the Turing
@@ -336,7 +342,7 @@ public class TuringMachine {
 	 * @throws IOException
 	 */
 	private void read(String tmString) throws WcbcException, IOException {
-		this.transitions = new HashMap<String, ArrayList<Transition>>();
+		initTransitions();
 		// split on newlines
 		String[] tmLines = tmString.split("\n");
 		// strip comments
@@ -353,6 +359,10 @@ public class TuringMachine {
 			}
 		}
 
+	}
+
+	private void initTransitions() {
+		this.transitions = new HashMap<String, ArrayList<Transition>>();
 	}
 
 	/**
@@ -537,13 +547,121 @@ public class TuringMachine {
 		this.tape.set(headPos, symbol);
 	}
 
+	/**
+	 * Add a transition to this machine.
+	 * 
+	 * @param t
+	 *            the Transition object to be added
+	 */
 	private void addTransition(Transition t) {
+		if (this.transitions == null) {
+			initTransitions();
+		}
+		ArrayList<Transition> transitionList = null;
+		String sourceState = t.getSourceState();
+		if (this.transitions.containsKey(sourceState)) {
+			transitionList = this.transitions.get(sourceState);
+		} else {
+			transitionList = new ArrayList<Transition>();
+			this.transitions.put(sourceState, transitionList);
+		}
+		transitionList.add(t);
+	}
+
+	/**
+	 * True if the given state is a halting state, and False otherwise.
+	 */
+	static private boolean isAHaltingState(String state) {
+		return state.equals(TuringMachine.acceptState) || state.equals(TuringMachine.rejectState)
+				|| state.equals(TuringMachine.haltState);
+	}
+
+	/**
+	 * Apply the given transition to the current configuration.
+	 * 
+	 * This implements one computational step of the Turing machine, following the
+	 * given transition to its destination state, writing a symbol onto the tape if
+	 * necessary, and moving the head if necessary.
+	 * 
+	 * @param t
+	 *            the Transition to be followed. If t is None and implicit rejection
+	 *            is permitted, the machine will transition into the project state.
+	 * @throws WcbcException
+	 */
+	private void applyTransition(Transition t) throws WcbcException {
+		if (TuringMachine.verbose) {
+			System.out.println("Applying transition" + t.toString());
+		}
+
+		this.steps = this.steps + 1;
+		if (t == null) {
+			if (this.allowImplicitReject) {
+				this.state = TuringMachine.rejectState;
+			} else {
+				String message = "***Error***: No valid transition was found, and implicit rejects are disabled.\n"
+						+ "Current configuration:\n" + this.toString();
+				throw new WcbcException(message);
+			}
+		} else {
+			this.state = t.getDestState();
+		}
+		if (isAHaltingState(this.state)) {
+			halted = true;
+		}
+		if (t != null) {
+			if (t.getWriteSymbol() != null) {
+				writeSymbol(t.getWriteSymbol().charAt(0));
+			}
+			if (t.getDirection() == strToDir(TuringMachine.leftDir)) {
+				if (headPos > 0) {
+					this.headPos = this.headPos - 1;
+				} else if (this.allowLeftFromCell0) {
+					// do nothing
+				} else {
+					String message = "***Error***: Tried to move left from cell 0, which is disallowed by "
+							+ "this Turing machine.\n" + "Current configuration:\n" + this.toString();
+					throw new WcbcException(message);
+				}
+			} else if (t.getDirection() == strToDir(TuringMachine.rightDir)) {
+				this.headPos = this.headPos + 1;
+				if (this.headPos == this.tape.size()) {
+					this.tape.add(TuringMachine.blank.charAt(0));
+				}
+			}
+		}
+		if (this.keepHistory) {
+			this.history.add(this.toString());
+		}
+	}
+
+	private void runBlock() {
+		TuringMachine block = this.blocks.get(this.state);
+		block.reset(utils.joinChars(this.tape), TuringMachine.startState, this.headPos);
+		block.run();
+		this.steps = this.steps + block.steps;
+		this.tape = block.tape;
+		this.headPos = block.headPos;
+		if (block.state == TuringMachine.rejectState) {
+			this.state = TuringMachine.rejectState;
+			this.halted = true;
+		}
+	}
+
+	private void run() {
 		// TODO Auto-generated method stub
 
 	}
 
-	private void reset(String tapeStr, String state, int headPos, int steps, boolean resetHistory) {
+	private void reset(String tapeStr, String state, int headPos) {
+		reset(tapeStr, state, headPos, 0);
+	}
 
+	private void reset(String tapeStr, String state, int headPos, int steps) {
+		reset(tapeStr, state, headPos, steps, true);
+	}
+
+	private void reset(String tapeStr, String state, int headPos, int steps, boolean resetHistory) {
+		// todo
 	}
 
 	private void checkAllSymbolsValid() {

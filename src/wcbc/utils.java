@@ -139,6 +139,38 @@ public class utils {
 		}
 		return sb.substring(0, end);
 	}
+	
+	public static String joinChars(Collection<Character> c) {
+		return joinChars(c, "");
+	}
+
+	/**
+	 * Join all elements of a Character collection together with a specified piece of
+	 * glue between each element.
+	 * 
+	 * @param c
+	 *            collection of Characters to be joined together
+	 * @param glue
+	 *            string to be inserted between each item in the collection
+	 * @return string of all items joined together with the specified glue between
+	 *         each item
+	 */
+	public static String joinChars(Collection<Character> c, String glue) {
+		StringBuilder sb = new StringBuilder();
+		for (Character s : c) {
+			sb.append(s);
+			sb.append(glue);
+		}
+		// remove the last piece of glue, if it exists
+		int end;
+		if (c.size() > 0) {
+			end = sb.length() - glue.length();
+		} else {
+			end = sb.length();
+		}
+		return sb.substring(0, end);
+	}
+	
 
 	/**
 	 * 
