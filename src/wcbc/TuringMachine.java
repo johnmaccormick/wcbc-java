@@ -1,5 +1,7 @@
 package wcbc;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -119,7 +121,7 @@ public class TuringMachine {
 	 * This is useful for certain experiments, but costly in terms of storage.
 	 * 
 	 */
-	public final boolean keepHistory;
+	public boolean keepHistory;
 
 	/**
 	 * list of strings giving config at each step
@@ -199,6 +201,10 @@ public class TuringMachine {
 			read(description);
 		}
 		checkAllSymbolsValid();
+	}
+
+	public TuringMachine(String description, String tapeStr, int depth, String name) throws WcbcException, IOException {
+		this(description, tapeStr, depth, name, true, true, false);
 	}
 
 	private void trimAll(String[] strings) {
@@ -634,7 +640,7 @@ public class TuringMachine {
 		}
 	}
 
-	private void runBlock() {
+	private void runBlock() throws WcbcException {
 		TuringMachine block = this.blocks.get(this.state);
 		block.reset(utils.joinChars(this.tape), TuringMachine.startState, this.headPos);
 		block.run();
@@ -647,9 +653,118 @@ public class TuringMachine {
 		}
 	}
 
-	private void run() {
-		// TODO Auto-generated method stub
+	// Perform one computational step for this Turing machine.
+	private void step() throws WcbcException {
+		ArrayList<Transition> ts = this.getValidTransitions();
+		if (ts.size() > 1) {
+			String message = "***Error***: multiple valid transitions in deterministic Turing machine.\n"
+					+ "Current state:" + this.state + "\n" + "Valid transitions:" + ts.toString();
+			throw new WcbcException(message);
+		}
+		Transition t;
+		if (ts.size() == 0) {
+			t = null;
+		} else {
+			t = ts.get(0);
+		}
+		this.applyTransition(t);
+		if (this.blocks.containsKey(this.state)) {
+			this.runBlock();
+		}
+	}
 
+	@Override
+	public String toString() {
+		String name = null;
+		if (this.name != null) {
+			name = this.name + ": ";
+		} else {
+			name = "";
+		}
+		return name + String.format("steps: %d tape: %s state: %s, headPos: %d", this.steps, utils.joinChars(this.tape),
+				this.state, this.headPos);
+	}
+
+	/**
+	 * Return the output of the Turing machine.
+	 * 
+	 * By definition, the output of a Turing machine is the tape contents up to but
+	 * not including the first blank.
+	 * 
+	 * @return output of the Turing machine
+	 */
+	public String getOutput() {
+		int blankIndex = -1;
+		// Find the index of the first blank on the tape.
+		if (!tape.contains(TuringMachine.blank.charAt(0))) {
+			// there is an implicit blank at the end of the tape
+			blankIndex = tape.size();
+		} else {
+			blankIndex = this.tape.indexOf(TuringMachine.blank.charAt(0));
+		}
+		List<Character> truncatedTape = tape.subList(0, blankIndex);
+		return utils.joinChars(truncatedTape);
+	}
+
+	// Allow derived classes to override ...?? //todo
+	public int getMaxsteps() {
+		return maxSteps;
+	}
+
+	/**
+	 * Run the Turing machine until it halts and return the output.
+	 * 
+	 * For practical reasons, the machine will also stop once it exceeds its maximum
+	 * number of steps.
+	 * 
+	 * @return The output of the machine's computation
+	 * @throws WcbcException
+	 */
+	public String run() throws WcbcException {
+		while (!this.halted && this.steps < this.getMaxsteps()) {
+			this.step();
+		}
+		if (this.state.equals(TuringMachine.acceptState)) {
+			return TuringMachine.yesStr;
+		} else if (this.state.equals(TuringMachine.rejectState)) {
+			return TuringMachine.noStr;
+		} else if (this.state.equals(TuringMachine.haltState)) {
+			return this.getOutput();
+		} else {
+			if (this.steps < this.getMaxsteps()) {
+				String message = "Turing machine halted in an unexpected way";
+				throw new WcbcException(message);
+			} else {
+				this.raiseExceededMaxSteps();
+			}
+			return null;
+		}
+	}
+
+	/**
+	 * Raise an exception indicating that the maximum number of steps was exceeded.
+	 * 
+	 * @throws WcbcException
+	 */
+	private void raiseExceededMaxSteps() throws WcbcException {
+		String message = TuringMachine.exceededMaxStepsMsg + ".  Current output: " + this.getOutput();
+		throw new WcbcException(message);
+	}
+
+	// Initialize the tape with the given content
+	private void initTape(String tapeContent) {
+		this.tape = new ArrayList<>();
+		for (int i = 0; i < tapeContent.length(); i++) {
+			tape.add(tapeContent.charAt(i));
+		}
+	}
+
+	private void reset(String tapeStr) {
+		reset(tapeStr, TuringMachine.startState);
+	}
+
+	private void reset(String tapeStr, String state) {
+		reset(tapeStr, state, 0);
 	}
 
 	private void reset(String tapeStr, String state, int headPos) {
@@ -660,13 +775,207 @@ public class TuringMachine {
 		reset(tapeStr, state, headPos, steps, true);
 	}
 
+	/**
+	 * Reset the Turing machine.
+	 * 
+	 * This is typically used to run a fresh computation on the machine, but
+	 * optional parameters allow the machine to be set up in more specific
+	 * configurations.
+	 * 
+	 * 
+	 * @param tapeStr
+	 *            The initial content of the Turing machine"s tape.
+	 * @param state
+	 *            The state in which the Turing machine should begin computing. By
+	 *            default, this will be the Turing machine's predefined initial
+	 *            state, but it can be something else.
+	 * @param headPos
+	 *            The initial location of the tape head, which defaults to zero.
+	 * @param steps
+	 *            The number of computational steps this machine has already
+	 *            performed. Usually this would be zero, but for certain experiments
+	 *            we want to reset the machine as if it has already done a certain
+	 *            amount of work.
+	 * @param resetHistory
+	 *            If True, delete any history of previous computations.
+	 */
 	private void reset(String tapeStr, String state, int headPos, int steps, boolean resetHistory) {
-		// todo
+		initTape(tapeStr);
+		if (state != null) {
+			this.state = state;
+		} else {
+			this.state = TuringMachine.startState;
+		}
+		this.headPos = headPos;
+		this.halted = false;
+		this.steps = steps;
+		// append blanks up to the head position if necessary
+		if (this.headPos >= this.tape.size()) {
+			int numBlanksNeeded = this.headPos - this.tape.size() + 1;
+			for (int i = 0; i < numBlanksNeeded; i++) {
+				this.tape.add(TuringMachine.blank.charAt(0));
+			}
+		}
+		if (this.keepHistory && resetHistory) {
+			// list of strings giving config at each step
+			this.history = new ArrayList<>();
+			this.history.add(this.toString());
+		}
 	}
 
-	private void checkAllSymbolsValid() {
+	/**
+	 * Copy most of the state of this Turing machine to the destination machine.
+	 * 
+	 * This is a helper to the clone() method, factored out so that derived classes
+	 * can implement their own clone() then call this helper. Copies the
+	 * transitions, blocks and history attributes to the destination then resets it.
+	 * 
+	 * 
+	 * @param dest
+	 *            Destination machine to which state will be copied.
+	 */
+	private void copyTMState(TuringMachine dest) {
+		dest.transitions = this.transitions;
+		dest.blocks = this.blocks;
+		dest.keepHistory = this.keepHistory;
+		if (this.keepHistory) {
+			dest.history = new ArrayList<String>(this.history);
+		}
+		dest.reset(utils.joinChars(this.tape), this.state, this.headPos, this.steps, false);
+	}
+
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		TuringMachine newTM = null;
+		try {
+			newTM = new TuringMachine(null, utils.joinChars(this.tape), this.depth, this.name);
+		} catch (WcbcException e) {
+			throw new CloneNotSupportedException(e.getMessage());
+		} catch (IOException e) {
+			throw new CloneNotSupportedException(e.getMessage());
+		}
+		this.copyTMState(newTM);
+		return newTM;
+	}
+
+	public void printTransitions() {
+		for (ArrayList<Transition> tList : this.transitions.values()) {
+			System.out.println(tList);
+		}
+	}
+
+	/**
+	 * Check if a given symbol is permitted in Turing machines.
+	 * 
+	 * Nothing is returned, but a WcbcException is raised if the symbol is invalid.
+	 * 
+	 * @param t
+	 *            the Transition in which c is used.
+	 * @param c
+	 *            a single character which is the symbol to be checked
+	 * @throws WcbcException
+	 */
+	private void checkSymbolIsValid(Transition t, char c) throws WcbcException {
+		if (!TuringMachine.validSymbols.contains(c)) {
+			String message = String
+					.format("***Error***: The symbol %c (ASCII value %d) is not permitted in Turing machine alphabets. "
+							+ "The full transition containing this error is:\n%s", c, (int) c, t.toString());
+			throw new WcbcException(message);
+		}
+	}
+
+	/**
+	 * Check that all symbols used in this machine are permitted.
+	 * 
+	 * Nothing is returned, but a WcbcException is raised if a symbol is invalid.
+	 * 
+	 * @throws WcbcException
+	 */
+	private void checkAllSymbolsValid() throws WcbcException {
+		if (transitions != null) {
+			for (ArrayList<Transition> tList : this.transitions.values()) {
+				for (Transition t : tList) {
+					String label = t.getLabel();
+					if (label.equals(TuringMachine.anySym)) {
+						continue;
+					} else if (label.charAt(0) == TuringMachine.notSym.charAt(0)) {
+						label = label.substring(1);
+					}
+					for (int i = 0; i < label.length(); i++) {
+						checkSymbolIsValid(t, label.charAt(i));
+					}
+				}
+			}
+		}
 
 	}
+
+	/**
+	 * Determine whether two Turing machines have the same transitions.
+	 * 
+	 * @param tm1
+	 *            first Turing machine to be compared
+	 * @param tm2
+	 *            second Turing machine to be compared
+	 * @return True if the two given Turing machines have transitions that are
+	 *         equivalent, and False otherwise.
+	 */
+	public boolean haveSameTransitions(TuringMachine tm1, TuringMachine tm2) {
+		return tm1.hasSameTransitions(tm2) && tm2.hasSameTransitions(tm1);
+	}
+
+	/**
+	 * Determine whether every transition in this Turing machine exists in the other
+	 * machine.
+	 * 
+	 * This method is not symmetric in the parameters. It checks if every transition
+	 * in this has a corresponding transition in other, but other may have
+	 * additional transitions.
+	 * 
+	 * @param other
+	 *            machine whose transitions will be compared with the current
+	 *            machine
+	 * @return True if every transition in this has a corresponding transition in
+	 *         other.
+	 */
+	private boolean hasSameTransitions(TuringMachine other) {
+		for (String state : transitions.keySet()) {
+			ArrayList<Transition> tList = transitions.get(state);
+			ArrayList<Transition> otherTList = other.getTransitions(state);
+			for (Transition t : tList) {
+				ArrayList<Transition> otherCompatible = new ArrayList<Transition>();
+				for (Transition tr : otherTList) {
+					if (t.isCompatible(tr)) {
+						otherCompatible.add(tr);
+					}
+				}
+				for (Character c : TuringMachine.validSymbolsArray) {
+					if (labelMatchesSymbol(c.toString(), t.getLabel())) {
+						boolean foundMatch = false;
+						for (Transition otherTrans : otherCompatible) {
+							if (labelMatchesSymbol(c.toString(), otherTrans.getLabel())) {
+								foundMatch = true;
+								break;
+							}
+						}
+						if (!foundMatch) {
+							return false;
+						}
+					}
+				}
+			}
+		}
+
+		return true;
+	}
+
+	///////////////////////////////////////////////////////////////////////////////
+	// The following Python methods were not translated into Java. Hopefully we
+	// won't need them:
+    //
+	// sortLabelChars(this, s); standardizeDescription(this, d);
+	// descriptionsAreSame(this, thisDesc, other, otherDesc); unifyTransitions(this)
+	///////////////////////////////////////////////////////////////////////////////
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
