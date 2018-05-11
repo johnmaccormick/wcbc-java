@@ -242,6 +242,12 @@ public class utils {
 		return randomLenAlphanumericString(20);
 		
 	}
+    
+    public static void trimAll(String[] strings) {
+		for (int i = 0; i < strings.length; i++) {
+			strings[i] = strings[i].trim();
+		}
+	}
 
 	public static void main(String[] args) throws IOException, WcbcException {
 		// String[] c = {"abc", "def", "ghi"};

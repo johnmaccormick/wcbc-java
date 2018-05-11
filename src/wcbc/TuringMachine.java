@@ -207,11 +207,22 @@ public class TuringMachine {
 		this(description, tapeStr, depth, name, true, true, false);
 	}
 
-	private void trimAll(String[] strings) {
-		for (int i = 0; i < strings.length; i++) {
-			strings[i] = strings[i].trim();
+	public TuringMachine(String description, String tapeStr) throws WcbcException, IOException {
+		this(description, tapeStr, 0, null);
+	}	
+	
+	public void startKeepingHistory() {
+		if(this.keepHistory) {
+			return;
+		} else {
+			this.keepHistory = true;
+			this.initHistory();
 		}
+		
+		
 	}
+	
+
 
 	/**
 	 * Convert a string representing a direction into the corresponding Direction
@@ -272,14 +283,14 @@ public class TuringMachine {
 		String splitRegex = "[" + TuringMachine.labelSeparator + TuringMachine.writeSymSeparator + "]";
 		// Split on the above two separators
 		String[] components = line.split(splitRegex);
-		trimAll(components); // yields (states, label, actions)
+		utils.trimAll(components); // yields (states, label, actions)
 		String states = components[0];
 		String label = components[1];
 		String actions = components[2];
 
 		// Split into source and destination state
 		String[] stateComponents = states.split(TuringMachine.stateSeparator);
-		trimAll(stateComponents);
+		utils.trimAll(stateComponents);
 		String sourceState = stateComponents[0];
 		String destState = stateComponents[1];
 
@@ -306,7 +317,7 @@ public class TuringMachine {
 		String dirString = actions;
 		if (actions.contains(TuringMachine.actionSeparator)) {
 			String[] actionComponents = actions.split(TuringMachine.actionSeparator);
-			trimAll(actionComponents);
+			utils.trimAll(actionComponents);
 			writeSymbol = actionComponents[0];
 			dirString = actionComponents[1];
 		}
@@ -353,7 +364,7 @@ public class TuringMachine {
 		String[] tmLines = tmString.split("\n");
 		// strip comments
 		tmLines = stripComments(tmLines);
-		trimAll(tmLines);
+		utils.trimAll(tmLines);
 		for (String line : tmLines) {
 			if (line.length() > 0) {
 				if (line.startsWith(TuringMachine.blockMarker)) {
@@ -435,13 +446,13 @@ public class TuringMachine {
 
 		// Partition on the TuringMachine.blockSeparator
 		String[] components = line.split(TuringMachine.blockSeparator);
-		trimAll(components);
+		if (components.length != 2) {
+			throw new WcbcException("Unexpected format in block description: " + line);
+		}		
+		utils.trimAll(components);
 		String state = components[0];
-		String separator = components[1];
-		String filename = components[2];
-		if (separator != blockSeparator) {
-			throw new WcbcException("Unexpected separator in block description");
-		}
+		String filename = components[1];
+
 
 		TuringMachine newBlock = new TuringMachine(utils.rf(filename), "", this.depth + 1, filename,
 				allowImplicitReject, allowLeftFromCell0, keepHistory);
@@ -817,11 +828,16 @@ public class TuringMachine {
 			}
 		}
 		if (this.keepHistory && resetHistory) {
-			// list of strings giving config at each step
-			this.history = new ArrayList<>();
-			this.history.add(this.toString());
+			initHistory();
 		}
 	}
+
+	private void initHistory() {
+		this.history = new ArrayList<>();
+		this.history.add(this.toString());
+	}
+	
+	
 
 	/**
 	 * Copy most of the state of this Turing machine to the destination machine.
@@ -977,9 +993,14 @@ public class TuringMachine {
 	// descriptionsAreSame(this, thisDesc, other, otherDesc); unifyTransitions(this)
 	///////////////////////////////////////////////////////////////////////////////
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+	public static void main(String[] args) throws IOException, WcbcException {
+//		String description = utils.rf("containsGAGA.tm");
+//		String tapeStr = "CCCGAGACCAAAAAA";		
+		String description = utils.rf("countCs.tm");
+		String tapeStr = "xGCGCGCACGCGGGx";
+		TuringMachine tm = new TuringMachine(description, tapeStr);
+		String result = tm.run();
+		System.out.println(result);
 	}
 
 }
