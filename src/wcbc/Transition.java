@@ -108,6 +108,14 @@ public class Transition {
 		return unifiedTrans;
 
 	}
+	
+	
+
+	@Override
+	public String toString() {
+		return "Transition [sourceState=" + sourceState + ", destState=" + destState + ", label=" + label
+				+ ", writeSymbol=" + writeSymbol + ", direction=" + direction + "]";
+	}
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub

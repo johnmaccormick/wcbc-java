@@ -209,20 +209,21 @@ public class TuringMachine {
 
 	public TuringMachine(String description, String tapeStr) throws WcbcException, IOException {
 		this(description, tapeStr, 0, null);
-	}	
-	
+	}
+
+	public TuringMachine(String description) throws WcbcException, IOException {
+		this(description, "");
+	}
+
 	public void startKeepingHistory() {
-		if(this.keepHistory) {
+		if (this.keepHistory) {
 			return;
 		} else {
 			this.keepHistory = true;
 			this.initHistory();
 		}
-		
-		
-	}
-	
 
+	}
 
 	/**
 	 * Convert a string representing a direction into the corresponding Direction
@@ -410,7 +411,7 @@ public class TuringMachine {
 	 *         .tm file.
 	 * @throws WcbcException
 	 */
-	private String write() throws WcbcException {
+	public String write() throws WcbcException {
 		if (this.blocks.size() > 0) {
 			throw new WcbcException("Error: writing Turing machines is not implemented for blocks.");
 		}
@@ -448,11 +449,10 @@ public class TuringMachine {
 		String[] components = line.split(TuringMachine.blockSeparator);
 		if (components.length != 2) {
 			throw new WcbcException("Unexpected format in block description: " + line);
-		}		
+		}
 		utils.trimAll(components);
 		String state = components[0];
 		String filename = components[1];
-
 
 		TuringMachine newBlock = new TuringMachine(utils.rf(filename), "", this.depth + 1, filename,
 				allowImplicitReject, allowLeftFromCell0, keepHistory);
@@ -836,8 +836,6 @@ public class TuringMachine {
 		this.history = new ArrayList<>();
 		this.history.add(this.toString());
 	}
-	
-	
 
 	/**
 	 * Copy most of the state of this Turing machine to the destination machine.
@@ -876,7 +874,8 @@ public class TuringMachine {
 
 	public void printTransitions() {
 		for (ArrayList<Transition> tList : this.transitions.values()) {
-			System.out.println(tList);
+			for(Transition t:tList) {
+			System.out.println(t.toString());}
 		}
 	}
 
@@ -988,14 +987,14 @@ public class TuringMachine {
 	///////////////////////////////////////////////////////////////////////////////
 	// The following Python methods were not translated into Java. Hopefully we
 	// won't need them:
-    //
+	//
 	// sortLabelChars(this, s); standardizeDescription(this, d);
 	// descriptionsAreSame(this, thisDesc, other, otherDesc); unifyTransitions(this)
 	///////////////////////////////////////////////////////////////////////////////
 
 	public static void main(String[] args) throws IOException, WcbcException {
-//		String description = utils.rf("containsGAGA.tm");
-//		String tapeStr = "CCCGAGACCAAAAAA";		
+		// String description = utils.rf("containsGAGA.tm");
+		// String tapeStr = "CCCGAGACCAAAAAA";
 		String description = utils.rf("countCs.tm");
 		String tapeStr = "xGCGCGCACGCGGGx";
 		TuringMachine tm = new TuringMachine(description, tapeStr);

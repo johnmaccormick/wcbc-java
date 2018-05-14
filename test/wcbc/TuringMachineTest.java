@@ -14,25 +14,25 @@ class TuringMachineTest {
 	}
 
 	@Test
-	void testTuringMachineStringStringIntString() {
-		fail("Not yet implemented");
-	}
+	void testWrite() throws IOException, WcbcException {
+		String[] testVals = { "containsGAGA.tm", "binaryIncrementer.tm" };
 
-	@Test
-	void testToString() {
-		fail("Not yet implemented");
-	}
+		for (String v : testVals) {
 
-	@Test
-	void testGetOutput() {
-		fail("Not yet implemented");
+			String description = utils.rf(v);
+			TuringMachine tm = new TuringMachine(description);
+			String description2 = tm.write();
+			TuringMachine tm2 = new TuringMachine(description2);
+			String description3 = tm.write();
+			assertEquals(description2, description3);
+		}
 	}
 
 	@Test
 	void testRun() throws IOException, WcbcException {
 		String[][] testVals = { { "containsGAGA.tm", "CCCCCCCCCAAAAAA", "no" },
-				{ "containsGAGA.tm", "CCCGAGACCAAAAAA", "yes" }, { "binaryIncrementer.tm", "x100111x", "x101000x" }, 
-				{"countCs.tm", "xGCGCGCACGCGGGx", "x101x"}};
+				{ "containsGAGA.tm", "CCCGAGACCAAAAAA", "yes" }, { "binaryIncrementer.tm", "x100111x", "x101000x" },
+				{ "countCs.tm", "xGCGCGCACGCGGGx", "x101x" } };
 
 		for (String[] v : testVals) {
 			String filename = v[0];
@@ -49,18 +49,31 @@ class TuringMachineTest {
 	}
 
 	@Test
-	void testClone() {
-		fail("Not yet implemented");
+	void testClone() throws IOException, WcbcException, CloneNotSupportedException {
+		String[] testVals = { "containsGAGA.tm", "binaryIncrementer.tm" };
+
+		for (String v : testVals) {
+
+			String description = utils.rf(v);
+			TuringMachine tm = new TuringMachine(description);
+			TuringMachine tmClone = (TuringMachine) tm.clone();
+			String description2 = tm.write();
+			TuringMachine tm2 = new TuringMachine(description2);
+			String descriptionClone = tmClone.write();
+			assertEquals(description2, descriptionClone);
+		}
 	}
 
 	@Test
-	void testPrintTransitions() {
-		fail("Not yet implemented");
-	}
+	void testPrintTransitions() throws WcbcException, IOException {
+		String[] testVals = { "containsGAGA.tm", "binaryIncrementer.tm" };
 
-	@Test
-	void testHaveSameTransitions() {
-		fail("Not yet implemented");
-	}
+		for (String v : testVals) {
+
+			String description = utils.rf(v);
+			TuringMachine tm = new TuringMachine(description);
+			tm.printTransitions();
+		}	}
+
 
 }
