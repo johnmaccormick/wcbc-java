@@ -1,5 +1,7 @@
 package wcbc;
 
+import java.io.IOException;
+
 /**
  * Interface Siso2.java
  * 
@@ -27,6 +29,7 @@ public interface Siso2 {
 	 *            "input string."
 	 * @return The result computed by the SISO function.
 	 * @throws WcbcException 
+	 * @throws IOException 
 	 */
-	String siso(String progString, String inString) throws WcbcException;
+	String siso(String progString, String inString) throws WcbcException, IOException;
 }
