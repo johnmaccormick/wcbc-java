@@ -1,6 +1,7 @@
 package wcbc;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -45,6 +46,23 @@ public class utils {
 	 */
 	public static String rf(String fileName) throws IOException {
 		return utils.readFile(fileName);
+	}
+
+	/**
+	 * Write a file, overwriting any existing content with the given content.
+	 * 
+	 * @param fileName
+	 *            The name of the file to be written or overwritten.
+	 * @param fileContents
+	 *            The contents of the file to be written, stored as a single string
+	 *            that may contain newlines.
+	 * @throws IOException
+	 */
+	public static void writeFile(String fileName, String fileContents) throws IOException {
+		try (PrintWriter out = new PrintWriter(fileName)) {
+			out.print(fileContents);
+		}
+
 	}
 
 	/**
@@ -139,14 +157,14 @@ public class utils {
 		}
 		return sb.substring(0, end);
 	}
-	
+
 	public static String joinChars(Collection<Character> c) {
 		return joinChars(c, "");
 	}
 
 	/**
-	 * Join all elements of a Character collection together with a specified piece of
-	 * glue between each element.
+	 * Join all elements of a Character collection together with a specified piece
+	 * of glue between each element.
 	 * 
 	 * @param c
 	 *            collection of Characters to be joined together
@@ -170,7 +188,6 @@ public class utils {
 		}
 		return sb.substring(0, end);
 	}
-	
 
 	/**
 	 * 
@@ -221,29 +238,29 @@ public class utils {
 		return inStrings;
 	}
 
-    public static final String alphanumericChars = "abcdefghijklmnopqstuvwxyzABCDEFGHIJKLMNOPQSTUVWXYZ0123456789";
-    public static final int numAlphanumericChars = utils.alphanumericChars.length();
+	public static final String alphanumericChars = "abcdefghijklmnopqstuvwxyzABCDEFGHIJKLMNOPQSTUVWXYZ0123456789";
+	public static final int numAlphanumericChars = utils.alphanumericChars.length();
 
-    public static String randomLenAlphanumericString(int maxLength) {
+	public static String randomLenAlphanumericString(int maxLength) {
 		int length = aRandom.nextInt(maxLength);
 		return randomAlphanumericString(length);
-		
+
 	}
-    
-    public static String randomAlphanumericString(int length) {
+
+	public static String randomAlphanumericString(int length) {
 		StringBuilder b = new StringBuilder();
-		for(int i=0; i<length; i++) {
+		for (int i = 0; i < length; i++) {
 			b.append(utils.alphanumericChars.charAt(aRandom.nextInt(numAlphanumericChars)));
 		}
 		return b.toString();
 	}
-    
-    public static String randomLenAlphanumericString() {
+
+	public static String randomLenAlphanumericString() {
 		return randomLenAlphanumericString(20);
-		
+
 	}
-    
-    public static void trimAll(String[] strings) {
+
+	public static void trimAll(String[] strings) {
 		for (int i = 0; i < strings.length; i++) {
 			strings[i] = strings[i].trim();
 		}
@@ -263,17 +280,17 @@ public class utils {
 		// String val = utils.extractClassName(progString);
 		// System.out.println(val);
 
-//		String a = "abc";
-//		String b = "defg";
-//		String c = utils.ESS(a, b);
-//		String[] d = utils.DESS(c);
-//		System.out.println(c);
-//		System.out.println(d[0]);
-//		System.out.println(d[1]);
-		
-		for(int i=0; i<10; i++) {
+		// String a = "abc";
+		// String b = "defg";
+		// String c = utils.ESS(a, b);
+		// String[] d = utils.DESS(c);
+		// System.out.println(c);
+		// System.out.println(d[0]);
+		// System.out.println(d[1]);
+
+		for (int i = 0; i < 10; i++) {
 			System.out.println(utils.randomLenAlphanumericString());
 		}
-		
+
 	}
 }
