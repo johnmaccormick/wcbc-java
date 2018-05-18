@@ -11,10 +11,10 @@ class YesOnStringTest {
 	@Test
 	void testSiso() throws WcbcException, IOException {
 		String[][] testVals = {
-		        {"containsGAGA.java", "TTTTGAGATT", "yes"},
-		        {"containsGAGA.java", "TTTTGAGTT", "no"},
-		        {"isEmpty.java", "", "yes"},
-		        {"isEmpty.java", "x", "no"},
+		        {"ContainsGAGA.java", "TTTTGAGATT", "yes"},
+		        {"ContainsGAGA.java", "TTTTGAGTT", "no"},
+		        {"IsEmpty.java", "", "yes"},
+		        {"IsEmpty.java", "x", "no"},
 		    };
 		YesOnString yesOnString = new YesOnString();
 

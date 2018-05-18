@@ -31,7 +31,11 @@ public class YesOnString implements Siso2 {
 	public String siso(String progString, String inString) throws WcbcException {
 		Universal universal = new Universal();
 		String val = universal.siso(progString, inString);
-		return val;
+		if(val.equals("yes")) {
+			return "yes";
+		} else {
+			return "no";
+		}
 	}
 
 	public static void main(String[] args) throws IOException, WcbcException {

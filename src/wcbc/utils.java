@@ -257,7 +257,6 @@ public class utils {
 
 	public static String randomLenAlphanumericString() {
 		return randomLenAlphanumericString(20);
-
 	}
 
 	public static void trimAll(String[] strings) {
