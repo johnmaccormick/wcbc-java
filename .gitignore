@@ -26,3 +26,7 @@ hs_err_pid*
 # eclipse-specific
 .metadata
 
+# wcbc-specific
+src/wcbc/inString.txt
+src/wcbc/progString.txt
+src/wcbc/test.txt
