@@ -265,7 +265,36 @@ public class utils {
 		}
 	}
 
-	public static void main(String[] args) throws IOException, WcbcException {
+	// global object for signaling halts to computations
+	public static Object haltComputations = new Object();
+
+	/**
+	 * Enter an infinite loop, but with features that facilitate testing.
+	 * 
+	 * This function supposedly enters an infinite loop. The intention is that it
+	 * should be used for simulating infinite loops, but in fact it is more
+	 * sophisticated. The function waits on the utils.haltComputations event, and
+	 * exits immediately if that event is signaled. This facilitates testing of code
+	 * that deliberately enters infinite loops. In addition, this function times out
+	 * after 3 seconds. This prevents background threads looping indefinitely.
+	 * 
+	 * @throws InterruptedException
+	 * 
+	 */
+	public static void loop() throws WcbcException {
+		// timeout is in milliseconds
+		final long timeout = 3000;
+		
+		try {
+			synchronized (haltComputations) {
+				haltComputations.wait(3000);
+			}
+		} catch (InterruptedException e) {
+			throw new WcbcException("InterruptedException: " + e.getMessage());
+		}
+	}
+
+	public static void main(String[] args) throws IOException, WcbcException, InterruptedException {
 		// String[] c = {"abc", "def", "ghi"};
 		// ArrayList<String> cArr = new ArrayList<>(Arrays.asList(c));
 		// String d = utils.join(cArr);
@@ -287,11 +316,14 @@ public class utils {
 		// System.out.println(d[0]);
 		// System.out.println(d[1]);
 
-//		for (int i = 0; i < 10; i++) {
-//			System.out.println(utils.randomLenAlphanumericString());
-//		}
+		// for (int i = 0; i < 10; i++) {
+		// System.out.println(utils.randomLenAlphanumericString());
+		// }
 
-		utils.writeFile(utils.prependWcbcPath("test.txt"), "asdf");
-		
+		// utils.writeFile(utils.prependWcbcPath("test.txt"), "asdf");
+
+		utils.loop();
+
 	}
+
 }
