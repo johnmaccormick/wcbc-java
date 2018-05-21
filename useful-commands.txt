@@ -5,3 +5,9 @@ c:\Users\jmac\eclipse-workspace\wcbc>java -cp "bin;C:\Program Files\Java\jdk1.8.
 
 jmac@jmac-tablet MSYS ~/eclipse-workspace/wcbc
 $ java -cp bin wcbc/Universal -f containsGAGA.java CCGAGACC
+
+
+cache ssh credentials:
+
+eval `ssh-agent -s`
+ssh-add ~/.ssh/*_rsa
