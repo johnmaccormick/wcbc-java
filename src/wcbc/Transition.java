@@ -27,6 +27,10 @@ public class Transition {
 		this.writeSymbol = writeSymbol;
 		this.direction = direction;
 	}
+	
+	public Transition(String sourceState, String destState, String label) {
+		this(sourceState, destState, label, null, TuringMachine.Direction.RIGHT);
+	}
 
 	public String getSourceState() {
 		return sourceState;

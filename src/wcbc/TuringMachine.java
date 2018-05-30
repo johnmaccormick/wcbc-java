@@ -1,7 +1,5 @@
 package wcbc;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -234,7 +232,7 @@ public class TuringMachine {
 	 * @return Direction enum representing one of left, right, stay
 	 * @throws WcbcException
 	 */
-	private Direction strToDir(String s) throws WcbcException {
+	protected Direction strToDir(String s) throws WcbcException {
 		if (s.equals(leftDir)) {
 			return Direction.LEFT;
 		} else if (s.equals(rightDir)) {
@@ -278,7 +276,7 @@ public class TuringMachine {
 	 *         documentation for the Transition class, and actions is a string
 	 *         containing the write symbol, if any, and the direction.
 	 */
-	private String[] splitTransition(String line) {
+	protected String[] splitTransition(String line) {
 		// Define a character set consisting of the label separator and
 		// the write symbol separator.
 		String splitRegex = "[" + TuringMachine.labelSeparator + TuringMachine.writeSymSeparator + "]";
@@ -307,7 +305,7 @@ public class TuringMachine {
 	 * @return a new Transition object
 	 * @throws WcbcException
 	 */
-	private Transition extractTransition(String line) throws WcbcException {
+	protected Transition extractTransition(String line) throws WcbcException {
 		String[] components = splitTransition(line);
 		String label = components[0];
 		String actions = components[1];
