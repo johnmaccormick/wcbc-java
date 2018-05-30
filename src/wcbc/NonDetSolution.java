@@ -42,7 +42,7 @@ public class NonDetSolution {
 	 * Send the signal that a positive solution has been found or all threads have
 	 * terminated negatively
 	 */
-	synchronized private void setDone() {
+	synchronized public void setDone() {
 		done = true;
 		this.notifyAll();
 	}

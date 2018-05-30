@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -284,7 +285,7 @@ public class utils {
 	public static void loop() throws WcbcException {
 		// timeout is in milliseconds
 		final long timeout = 3000;
-		
+
 		try {
 			synchronized (haltComputations) {
 				haltComputations.wait(3000);
@@ -293,6 +294,38 @@ public class utils {
 			throw new WcbcException("InterruptedException: " + e.getMessage());
 		}
 	}
+
+	/**
+	 * Exit Java, which also kills all Java threads.
+	 * 
+	 * This is useful for debugging and in certain other situations.
+	 */
+	public static void killAllThreadsAndExit() {
+		System.exit(0);
+	}
+
+	public static String waitForOnePosOrAllNeg(ArrayList<Thread> threads, NonDetSolution nonDetSolution) throws WcbcException {
+		final int maxThreads = 500;
+		if (threads.size() + java.lang.Thread.activeCount() > maxThreads) {
+			final String message = "Fatal error in waitForOnePosOrAllNeg: you attempted to run more than" + maxThreads
+					+ "threads simultaneously.  \n" + "In theory this isn't a problem, but in practice your Python\n"
+					+ "implementation may encounter difficulties. To avoid these potential\n"
+					+ "problems, all threads will now be killed.";
+			System.out.println(message);
+			killAllThreadsAndExit();
+		}
+
+		// start each thread
+		for (Thread t : threads) {
+			t.start();
+		}
+
+		Thread allTerminatedThread = new Thread(new WaitAllTerminated(threads, nonDetSolution));
+	    allTerminatedThread.start();
+	    nonDetSolution.waitUntilDone();
+	    return nonDetSolution.getSolution();
+	}
+	
 
 	public static void main(String[] args) throws IOException, WcbcException, InterruptedException {
 		// String[] c = {"abc", "def", "ghi"};
