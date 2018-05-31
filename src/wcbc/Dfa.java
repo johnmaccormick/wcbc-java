@@ -72,7 +72,37 @@ public class Dfa extends TuringMachine {
 
 		return new String[] { label, sourceState, destState };
 	}
+
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		Dfa dfa = (Dfa) super.clone();
+		this.copyTMState(dfa);
+		return dfa;
+	}
+
+	@Override
+	protected String writeTransition(Transition t) throws WcbcException {
+		// TODO Auto-generated method stub
+		String s = super.writeTransition(t);
+		int separatorLocation = s.lastIndexOf(TuringMachine.writeSymSeparator);
+		// epsilon transitions must be treated separately
+		if (t.getLabel().equals(TuringMachine.anySym) && dirToStr(t.getDirection()).equals(TuringMachine.stayDir)) {
+			// it's an epsilon transition -- return whole string
+			return s;
+		} else {
+			// dfa writes only the label
+			return s.substring(0, separatorLocation);
+		}
+	}
 	
+	
+	public static void main(String[] args) throws IOException, WcbcException {
+		String description = utils.rf(utils.prependWcbcPath("containsGAGA.dfa"));
+		String tapeStr = "AAAAAAGAGATTT";
+		Dfa dfa = new Dfa(description, tapeStr);
+		String result = dfa.run();
+		System.out.println(result);
+	}
 	
 
 }

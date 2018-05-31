@@ -253,7 +253,7 @@ public class TuringMachine {
 	 * @return string representing one of left, right, stay
 	 * @throws WcbcException
 	 */
-	private String dirToStr(Direction d) throws WcbcException {
+	protected String dirToStr(Direction d) throws WcbcException {
 		if (d == Direction.LEFT) {
 			return leftDir;
 		} else if (d == Direction.RIGHT) {
@@ -389,7 +389,7 @@ public class TuringMachine {
 	 * @return description format of the transition t
 	 * @throws WcbcException
 	 */
-	private String writeTransition(Transition t) throws WcbcException {
+	protected String writeTransition(Transition t) throws WcbcException {
 		String[] componentsBase = { t.getSourceState(), TuringMachine.stateSeparator, t.getDestState(),
 				TuringMachine.labelSeparator, " ", t.getLabel(), TuringMachine.writeSymSeparator };
 
@@ -846,7 +846,7 @@ public class TuringMachine {
 	 * @param dest
 	 *            Destination machine to which state will be copied.
 	 */
-	private void copyTMState(TuringMachine dest) {
+	protected void copyTMState(TuringMachine dest) {
 		dest.transitions = this.transitions;
 		dest.blocks = this.blocks;
 		dest.keepHistory = this.keepHistory;
