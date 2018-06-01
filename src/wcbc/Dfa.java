@@ -75,9 +75,19 @@ public class Dfa extends TuringMachine {
 
 	@Override
 	public Object clone() throws CloneNotSupportedException {
-		Dfa dfa = (Dfa) super.clone();
-		this.copyTMState(dfa);
-		return dfa;
+		
+		
+		Dfa newDfa = null;
+		try {
+			newDfa = new Dfa(null, utils.joinChars(this.tape), this.depth, this.name);
+		} catch (WcbcException e) {
+			throw new CloneNotSupportedException(e.getMessage());
+		} catch (IOException e) {
+			throw new CloneNotSupportedException(e.getMessage());
+		}
+		
+		this.copyTMState(newDfa);
+		return newDfa;
 	}
 
 	@Override

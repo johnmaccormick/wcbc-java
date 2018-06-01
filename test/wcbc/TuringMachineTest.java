@@ -23,7 +23,7 @@ class TuringMachineTest {
 			TuringMachine tm = new TuringMachine(description);
 			String description2 = tm.write();
 			TuringMachine tm2 = new TuringMachine(description2);
-			String description3 = tm.write();
+			String description3 = tm2.write();
 			assertEquals(description2, description3);
 		}
 	}
@@ -58,22 +58,21 @@ class TuringMachineTest {
 			TuringMachine tm = new TuringMachine(description);
 			TuringMachine tmClone = (TuringMachine) tm.clone();
 			String description2 = tm.write();
-			TuringMachine tm2 = new TuringMachine(description2);
 			String descriptionClone = tmClone.write();
 			assertEquals(description2, descriptionClone);
 		}
 	}
 
-	@Test
-	void testPrintTransitions() throws WcbcException, IOException {
-		String[] testVals = { "containsGAGA.tm", "binaryIncrementer.tm" };
-
-		for (String v : testVals) {
-
-			String description = utils.rf(v);
-			TuringMachine tm = new TuringMachine(description);
-			tm.printTransitions();
-		}	}
-
+//	@Test
+//	void testPrintTransitions() throws WcbcException, IOException {
+//		String[] testVals = { "containsGAGA.tm", "binaryIncrementer.tm" };
+//
+//		for (String v : testVals) {
+//
+//			String description = utils.rf(v);
+//			TuringMachine tm = new TuringMachine(description);
+//			tm.printTransitions();
+//		}
+//	}
 
 }

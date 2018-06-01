@@ -130,7 +130,7 @@ public class TuringMachine {
 	/**
 	 * The content of the Turing machine's tape
 	 */
-	private ArrayList<Character> tape = new ArrayList<>();
+	protected ArrayList<Character> tape = new ArrayList<>();
 
 	/**
 	 * The position of the Turing machine's read/write head.
