@@ -83,9 +83,16 @@ public class TuringMachine {
 
 	/**
 	 * The name of the machine can be used for debugging and meaningful output.
-	 * 
 	 */
-	public final String name;
+	protected String name;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	/**
 	 * If we encounter a state for which there is no explicitly listed transition,
@@ -93,7 +100,6 @@ public class TuringMachine {
 	 * to the textbook definition, allowImplicitReject should be True. But sometimes
 	 * it is convenient to set it to False for debugging purposes, since it will
 	 * prevent us unintentionally rejecting certain inputs.
-	 * 
 	 */
 	public final boolean allowImplicitReject;
 
@@ -115,11 +121,20 @@ public class TuringMachine {
 	private Map<String, TuringMachine> blocks = new HashMap<String, TuringMachine>();
 
 	/**
+	 * 
+	 * @return
+	 */
+	public int getBlocksLen() {
+		return blocks.size();
+	}	
+	
+	/**
 	 * If True, keep a complete record of the history of this machine's computation.
 	 * This is useful for certain experiments, but costly in terms of storage.
-	 * 
 	 */
 	public boolean keepHistory;
+
+
 
 	/**
 	 * list of strings giving config at each step
@@ -132,6 +147,10 @@ public class TuringMachine {
 	 */
 	protected ArrayList<Character> tape = new ArrayList<>();
 
+	public String getTape() {
+		return utils.joinChars(tape);
+	}	
+	
 	/**
 	 * The position of the Turing machine's read/write head.
 	 */
@@ -141,6 +160,10 @@ public class TuringMachine {
 	 * Current state of the Turing machine.
 	 */
 	private String state = null;
+
+	public String getState() {
+		return state;
+	}
 
 	// todo
 	private int steps = 0;
@@ -525,7 +548,7 @@ public class TuringMachine {
 	 * @return A list containing all transitions whose source state is the given
 	 *         state parameter, or null if there are no such transitions.
 	 */
-	private ArrayList<Transition> getTransitions(String state) {
+	public ArrayList<Transition> getTransitions(String state) {
 		ArrayList<Transition> trList = this.transitions.get(state);
 		return trList;
 	}
@@ -539,7 +562,7 @@ public class TuringMachine {
 	 * @return A list containing all valid transitions from the current
 	 *         configuration. This could be an empty list.
 	 */
-	private ArrayList<Transition> getValidTransitions() {
+	public ArrayList<Transition> getValidTransitions() {
 		ArrayList<Transition> transitionList = this.getTransitions(this.state);
 		ArrayList<Transition> ts = new ArrayList<>();
 		if (transitionList != null) {
@@ -603,7 +626,7 @@ public class TuringMachine {
 	 *            is permitted, the machine will transition into the project state.
 	 * @throws WcbcException
 	 */
-	private void applyTransition(Transition t) throws WcbcException {
+	public void applyTransition(Transition t) throws WcbcException {
 		if (TuringMachine.verbose) {
 			System.out.println("Applying transition" + t.toString());
 		}
@@ -755,7 +778,7 @@ public class TuringMachine {
 	 * 
 	 * @throws WcbcException
 	 */
-	private void raiseExceededMaxSteps() throws WcbcException {
+	public void raiseExceededMaxSteps() throws WcbcException {
 		String message = TuringMachine.exceededMaxStepsMsg + ".  Current output: " + this.getOutput();
 		throw new WcbcException(message);
 	}
@@ -768,19 +791,19 @@ public class TuringMachine {
 		}
 	}
 
-	private void reset(String tapeStr) {
+	public void reset(String tapeStr) {
 		reset(tapeStr, TuringMachine.startState);
 	}
 
-	private void reset(String tapeStr, String state) {
+	public void reset(String tapeStr, String state) {
 		reset(tapeStr, state, 0);
 	}
 
-	private void reset(String tapeStr, String state, int headPos) {
+	public void reset(String tapeStr, String state, int headPos) {
 		reset(tapeStr, state, headPos, 0);
 	}
 
-	private void reset(String tapeStr, String state, int headPos, int steps) {
+	public void reset(String tapeStr, String state, int headPos, int steps) {
 		reset(tapeStr, state, headPos, steps, true);
 	}
 
@@ -793,7 +816,7 @@ public class TuringMachine {
 	 * 
 	 * 
 	 * @param tapeStr
-	 *            The initial content of the Turing machine"s tape.
+	 *            The initial content of the Turing machine's tape.
 	 * @param state
 	 *            The state in which the Turing machine should begin computing. By
 	 *            default, this will be the Turing machine's predefined initial
@@ -808,7 +831,7 @@ public class TuringMachine {
 	 * @param resetHistory
 	 *            If True, delete any history of previous computations.
 	 */
-	private void reset(String tapeStr, String state, int headPos, int steps, boolean resetHistory) {
+	public void reset(String tapeStr, String state, int headPos, int steps, boolean resetHistory) {
 		initTape(tapeStr);
 		if (state != null) {
 			this.state = state;
