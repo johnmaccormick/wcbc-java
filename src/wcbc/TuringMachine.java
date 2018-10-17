@@ -126,15 +126,13 @@ public class TuringMachine {
 	 */
 	public int getBlocksLen() {
 		return blocks.size();
-	}	
-	
+	}
+
 	/**
 	 * If True, keep a complete record of the history of this machine's computation.
 	 * This is useful for certain experiments, but costly in terms of storage.
 	 */
 	public boolean keepHistory;
-
-
 
 	/**
 	 * list of strings giving config at each step
@@ -149,8 +147,8 @@ public class TuringMachine {
 
 	public String getTape() {
 		return utils.joinChars(tape);
-	}	
-	
+	}
+
 	/**
 	 * The position of the Turing machine's read/write head.
 	 */
@@ -255,7 +253,7 @@ public class TuringMachine {
 	 * @return Direction enum representing one of left, right, stay
 	 * @throws WcbcException
 	 */
-	protected Direction strToDir(String s) throws WcbcException {
+	public static Direction strToDir(String s) throws WcbcException {
 		if (s.equals(leftDir)) {
 			return Direction.LEFT;
 		} else if (s.equals(rightDir)) {
@@ -276,7 +274,7 @@ public class TuringMachine {
 	 * @return string representing one of left, right, stay
 	 * @throws WcbcException
 	 */
-	protected String dirToStr(Direction d) throws WcbcException {
+	public static String dirToStr(Direction d) throws WcbcException {
 		if (d == Direction.LEFT) {
 			return leftDir;
 		} else if (d == Direction.RIGHT) {
@@ -893,11 +891,35 @@ public class TuringMachine {
 		return newTM;
 	}
 
+	/**
+	 * Get the set of keys in the transition map.
+	 * 
+	 * This key set consists of all states that have outgoing transitions. We can use this
+	 * for iterating over transition lists.
+	 * 
+	 * @return the set of keys in the transition map
+	 */
+	public Set<String> getTransitionKeySet() {
+		return this.transitions.keySet();
+	}
+
 	public void printTransitions() {
 		for (ArrayList<Transition> tList : this.transitions.values()) {
-			for(Transition t:tList) {
-			System.out.println(t.toString());}
+			for (Transition t : tList) {
+				System.out.println(t.toString());
+			}
 		}
+	}
+	
+	
+
+	/**
+	 * Replace existing transition map with a new one.
+	 * 
+	 * @param transitions The new transition map
+	 */
+	public void setTransitions(Map<String, ArrayList<Transition>> transitions) {
+		this.transitions = transitions;
 	}
 
 	/**
