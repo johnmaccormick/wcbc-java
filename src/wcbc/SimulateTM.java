@@ -12,7 +12,7 @@ import java.io.IOException;
  * 
  * tmString: ASCII description of the machine M to be simulated
  * 
- * inString: the initial content I of M"s tape
+ * inString: the initial content I of M's tape
  * 
  * returns: the tape content when M enters a halting state
  * 
