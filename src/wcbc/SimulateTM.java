@@ -18,7 +18,7 @@ import java.io.IOException;
  * 
  * Example:
  * 
- * >>> java SimulateTM -f binaryIncrementer.tm x100111x
+ * >>> java wcbc/SimulateTM -f binaryIncrementer.tm x100111x
  * 
  * "x101000x"
  *

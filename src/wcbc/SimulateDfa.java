@@ -16,7 +16,7 @@ import java.io.IOException;
  * 
  * returns: "yes" if M accepts I and "no" otherwise
  * 
- * Example: > java SimulateDfa -f multipleOf5.dfa 3425735 
+ * Example: > java wcbc/SimulateDfa -f multipleOf5.dfa 3425735 
  * 
  * "yes"
  * 
