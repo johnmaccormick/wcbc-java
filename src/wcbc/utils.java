@@ -266,6 +266,24 @@ public class utils {
 		}
 	}
 
+	/**
+	 * Return True if integer M is prime, and False otherwise.
+	 * 
+	 * This is used for testing certain functions; see e.g. factor.java. A simple,
+	 * inefficient algorithm is employed.
+	 * 
+	 * @param M the integer whose primality is to be tested
+	 * @return true if integer M is prime, and false otherwise.
+	 */
+	public static boolean isPrime(int M) {
+		for (int i = 2; i < M; i++) {
+			if (M % i == 0) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	// global object for signaling halts to computations
 	public static Object haltComputations = new Object();
 
@@ -288,7 +306,7 @@ public class utils {
 
 		try {
 			synchronized (haltComputations) {
-				haltComputations.wait(3000);
+				haltComputations.wait(timeout);
 			}
 		} catch (InterruptedException e) {
 			throw new WcbcException("InterruptedException: " + e.getMessage());
@@ -304,7 +322,8 @@ public class utils {
 		System.exit(0);
 	}
 
-	public static String waitForOnePosOrAllNeg(ArrayList<Thread> threads, NonDetSolution nonDetSolution) throws WcbcException {
+	public static String waitForOnePosOrAllNeg(ArrayList<Thread> threads, NonDetSolution nonDetSolution)
+			throws WcbcException {
 		final int maxThreads = 500;
 		if (threads.size() + java.lang.Thread.activeCount() > maxThreads) {
 			final String message = "Fatal error in waitForOnePosOrAllNeg: you attempted to run more than" + maxThreads
@@ -321,11 +340,10 @@ public class utils {
 		}
 
 		Thread allTerminatedThread = new Thread(new WaitAllTerminated(threads, nonDetSolution));
-	    allTerminatedThread.start();
-	    nonDetSolution.waitUntilDone();
-	    return nonDetSolution.getSolution();
+		allTerminatedThread.start();
+		nonDetSolution.waitUntilDone();
+		return nonDetSolution.getSolution();
 	}
-	
 
 	public static void main(String[] args) throws IOException, WcbcException, InterruptedException {
 		// String[] c = {"abc", "def", "ghi"};
