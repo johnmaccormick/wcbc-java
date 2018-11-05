@@ -272,7 +272,8 @@ public class utils {
 	 * This is used for testing certain functions; see e.g. factor.java. A simple,
 	 * inefficient algorithm is employed.
 	 * 
-	 * @param M the integer whose primality is to be tested
+	 * @param M
+	 *            the integer whose primality is to be tested
 	 * @return true if integer M is prime, and false otherwise.
 	 */
 	public static boolean isPrime(int M) {
@@ -345,7 +346,77 @@ public class utils {
 		return nonDetSolution.getSolution();
 	}
 
+	/**
+	 * Format a set of strings as a string.
+	 * 
+	 * The given set is returned enclosed by braces and with elements separated by
+	 * commas.
+	 * 
+	 * Example: formatASet({"abc", "d", "ef"})
+	 * 
+	 * "{d,ef,abc}"
+	 * 
+	 * @param theSet
+	 *            The set of strings to be formatted.
+	 * @return A string representing theSet, enclosed by braces and with elements
+	 *         separated by commas.
+	 */
+	public static String formatASet(Collection<String> theSet) {
+		return "{" + join(theSet, ",") + "}";
+	}
+
+	/**
+	 * Format a set of sets of strings as a single string.
+	 * 
+	 * Each set of strings is formatted using utils.formatASet(), and the resulting
+	 * strings are separated by space characters.
+	 * 
+	 * Args:
+	 * 
+	 * theSets (set of frozensets of str): The set of frozensets to be formatted.
+	 * 
+	 * Returns:
+	 * 
+	 * str: A string representing theSets.
+	 * 
+	 * Example:
+	 * 
+	 * String[] set1 = {"abc", "d", "ef"}; String[] set2 = {"w", "xy", "z"};
+	 * ArrayList<Collection<String>> sets = new ArrayList<>();
+	 * sets.add(Arrays.asList(set1)); sets.add(Arrays.asList(set2)); String
+	 * formattedSets = formatSetOfSets(sets); System.out.println(formattedSets);
+	 * 
+	 * {abc,d,ef} {w,xy,z}
+	 * 
+	 * @param theSets
+	 *            The set of sets to be formatted.
+	 * @return A string representing theSets.
+	 */
+	public static String formatSetOfSets(Collection<Collection<String>> theSets) {
+		ArrayList<String> strings = new ArrayList<>();
+		for (Collection<String> theSet : theSets) {
+			strings.add(formatASet(theSet));
+		}
+		return join(strings, " ");
+	}
+
+	// public static String formatSetOfSets2(Collection<String[]> theSets) {
+	// ArrayList<String> strings = new ArrayList<>();
+	// for (Collection<String> theSet : theSets) {
+	// strings.add(formatASet(theSet));
+	// }
+	// return join(strings, " ");
+	// }
+
 	public static void main(String[] args) throws IOException, WcbcException, InterruptedException {
+		String[] set1 = { "abc", "d", "ef" };
+		String[] set2 = { "w", "xy", "z" };
+		ArrayList<Collection<String>> sets = new ArrayList<>();
+		sets.add(Arrays.asList(set1));
+		sets.add(Arrays.asList(set2));
+		String formattedSets = formatSetOfSets(sets);
+		System.out.println(formattedSets);
+
 		// String[] c = {"abc", "def", "ghi"};
 		// ArrayList<String> cArr = new ArrayList<>(Arrays.asList(c));
 		// String d = utils.join(cArr);
