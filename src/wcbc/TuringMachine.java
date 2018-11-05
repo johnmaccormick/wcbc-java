@@ -10,6 +10,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * A TuringMachine object models a Turing machine as described in the textbook.
+ *
+ */
 public class TuringMachine {
 
 	public enum Direction {
@@ -894,8 +898,8 @@ public class TuringMachine {
 	/**
 	 * Get the set of keys in the transition map.
 	 * 
-	 * This key set consists of all states that have outgoing transitions. We can use this
-	 * for iterating over transition lists.
+	 * This key set consists of all states that have outgoing transitions. We can
+	 * use this for iterating over transition lists.
 	 * 
 	 * @return the set of keys in the transition map
 	 */
@@ -910,13 +914,12 @@ public class TuringMachine {
 			}
 		}
 	}
-	
-	
 
 	/**
 	 * Replace existing transition map with a new one.
 	 * 
-	 * @param transitions The new transition map
+	 * @param transitions
+	 *            The new transition map
 	 */
 	public void setTransitions(Map<String, ArrayList<Transition>> transitions) {
 		this.transitions = transitions;
