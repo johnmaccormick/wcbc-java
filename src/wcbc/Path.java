@@ -34,6 +34,7 @@ public class Path {
 	 * @param nodes
 	 *            list of nodes in the path, where each node is a string
 	 * @throws WcbcException
+	 *             thrown if any node name is the empty string
 	 */
 	public Path(Collection<String> nodes) throws WcbcException {
 		for (String node : nodes) {
@@ -43,6 +44,18 @@ public class Path {
 		}
 		this.nodes = new ArrayList<>(nodes);
 
+	}
+
+	/**
+	 * Construct a Path from a list of nodes
+	 * 
+	 * @param nodes
+	 *            list of nodes in the path
+	 * @throws WcbcException
+	 *             thrown if any node name is the empty string
+	 */
+	public Path(String[] nodes) throws WcbcException {
+		this(Arrays.asList(nodes));
 	}
 
 	@Override
