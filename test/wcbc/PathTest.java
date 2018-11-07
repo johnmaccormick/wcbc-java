@@ -233,4 +233,28 @@ class PathTest {
 		assertEquals(edges.length, i);
 	}
 
+	@Test
+	void testContains() throws WcbcException {
+		Path p = new Path("a,b,c,d,e".split(","));
+		Edge e1 = new Edge("a,b".split(","));
+		assertTrue(p.containsEdge(e1));
+		Edge e2 = new Edge("b,c".split(","));
+		assertTrue(p.containsEdge(e2));
+		Edge e3 = new Edge("c,d".split(","));
+		assertTrue(p.containsEdge(e3));
+		Edge e4 = new Edge("d,e".split(","));
+		assertTrue(p.containsEdge(e4));
+		Edge e5 = new Edge("b,a".split(","));
+		assertFalse(p.containsEdge(e5));
+		Edge e6 = new Edge("b,d".split(","));
+		assertFalse(p.containsEdge(e6));
+
+		String[] empty = {};
+		Path p2 = new Path(empty);
+		assertFalse(p2.containsEdge(e6));
+		
+		
+		
+	}
+	
 }

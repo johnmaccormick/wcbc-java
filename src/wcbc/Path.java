@@ -130,6 +130,9 @@ public class Path implements Iterable<Edge> {
 		}
 		return true;
 	}
+	
+	
+	
 
 	/**
 	 * Construct a new Path object from a string and return it.
@@ -261,6 +264,23 @@ public class Path implements Iterable<Edge> {
 	@Override
 	public Iterator<Edge> iterator() {
 		return new PathIterator(this);
+	}
+
+	/**
+	 * Return True if the given edge is in this path and False otherwise.
+	 * 
+	 * @param edge
+	 *            The edge we are querying.
+	 * @return True if the given edge is in this path and False otherwise.
+	 */
+	public boolean containsEdge(Edge edge) {
+		if (this.edgeSet == null) {
+			edgeSet = new HashSet<>();
+			for (Edge e : this) {
+				edgeSet.add(e);
+			}
+		}
+		return edgeSet.contains(edge);
 	}
 
 }
