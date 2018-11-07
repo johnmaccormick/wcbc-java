@@ -5,12 +5,15 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * A Path object models a path in a graph.
  *
  */
-public class Path {
+public class Path implements Iterable<Edge> {
 
 	/**
 	 * List of the nodes in the path, where each node is a string.
@@ -107,8 +110,8 @@ public class Path {
 			return true;
 		if (obj == null)
 			return false;
-        // Importantly, we allow subclasses to be equal -- this allows
-        // an equivalent Path and Edge to be equal.
+		// Importantly, we allow subclasses to be equal -- this allows
+		// an equivalent Path and Edge to be equal.
 		if (!(obj instanceof Path))
 			return false;
 		Path other = (Path) obj;
@@ -221,6 +224,43 @@ public class Path {
 		ArrayList<String> newNodes = new ArrayList<>(tail);
 		newNodes.addAll(head);
 		return new Path(newNodes);
+	}
+
+	private static final class PathIterator implements Iterator<Edge> {
+		private int cursor;
+		private final int end;
+		private Path p;
+
+		public PathIterator(Path p) {
+			this.cursor = 0;
+			this.end = p.getLength() - 1;
+			this.p = p;
+		}
+
+		public boolean hasNext() {
+			return this.cursor < end;
+		}
+
+		public Edge next() {
+			if (!this.hasNext()) {
+				throw new NoSuchElementException();
+			}
+			List<String> edgeNodes = p.nodes.subList(cursor, cursor + 2);
+			cursor++;
+			Edge edge = null;
+			try {
+				edge = new Edge(edgeNodes);
+			} catch (WcbcException e) {
+				throw new RuntimeException("couldn't create edge: " + e.getMessage());
+			}
+			return edge;
+		}
+
+	}
+
+	@Override
+	public Iterator<Edge> iterator() {
+		return new PathIterator(this);
 	}
 
 }
