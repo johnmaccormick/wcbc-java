@@ -107,14 +107,24 @@ public class Path {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+        // Importantly, we allow subclasses to be equal -- this allows
+        // an equivalent Path and Edge to be equal.
+		if (!(obj instanceof Path))
 			return false;
 		Path other = (Path) obj;
 		if (nodes == null) {
 			if (other.nodes != null)
 				return false;
-		} else if (!nodes.equals(other.nodes))
-			return false;
+		} else {
+			if (this.nodes.size() != other.nodes.size()) {
+				return false;
+			}
+			for (int i = 0; i < this.nodes.size(); i++) {
+				if (!this.nodes.get(i).equals(other.nodes.get(i))) {
+					return false;
+				}
+			}
+		}
 		return true;
 	}
 
@@ -206,8 +216,10 @@ public class Path {
 			throw new WcbcException(message);
 		}
 		int ind = this.nodes.indexOf(node);
-		ArrayList<String> newNodes = new ArrayList<>(this.nodes.subList(ind, getLength()));
-		newNodes.addAll(this.nodes.subList(0, ind));
+		Collection<String> tail = this.nodes.subList(ind, getLength());
+		Collection<String> head = this.nodes.subList(0, ind);
+		ArrayList<String> newNodes = new ArrayList<>(tail);
+		newNodes.addAll(head);
 		return new Path(newNodes);
 	}
 
