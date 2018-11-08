@@ -1,8 +1,13 @@
 package wcbc;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 /**
@@ -49,7 +54,7 @@ public class Graph {
 	 *            True if this is a weighted graph and False otherwise.
 	 * @param directed
 	 *            True if this is a directed graph and False otherwise.
-	 * @throws WcbcException 
+	 * @throws WcbcException
 	 */
 	public Graph(String graphString, boolean weighted, boolean directed) throws WcbcException {
 		this.weighted = weighted;
@@ -98,35 +103,35 @@ public class Graph {
 					weight = Integer.parseInt(weightStr);
 				} else { // unweighted
 					if (components.length != 2) {
-						throw new WcbcException(
-								"expected 2 components in edge description " + edgeDescription + " for unweighted graph");						
+						throw new WcbcException("expected 2 components in edge description " + edgeDescription
+								+ " for unweighted graph");
 					}
 					sourceStr = components[0];
 					destStr = components[1];
 					weight = 1;
 				}
 
-				if(sourceStr.length()==0 || (destStr!=null && destStr.length()==0)) {
+				if (sourceStr.length() == 0 || (destStr != null && destStr.length() == 0)) {
 					throw new WcbcException("encountered node name of length zero");
 				}
 
-				if(!nodes.containsKey(sourceStr)) {
+				if (!nodes.containsKey(sourceStr)) {
 					nodes.put(sourceStr, new HashMap<String, Integer>());
 				}
-				
+
 				Map<String, Integer> source = nodes.get(sourceStr);
-				if(destStr!=null) {
-					if(!nodes.containsKey(destStr)) {
+				if (destStr != null) {
+					if (!nodes.containsKey(destStr)) {
 						// we haven't seen this node before -- create it
 						nodes.put(destStr, new HashMap<String, Integer>());
 					}
-					if(source.containsKey(destStr)) {
+					if (source.containsKey(destStr)) {
 						throw new WcbcException("duplicate edge: " + sourceStr + " " + destStr);
 					}
 					source.put(destStr, weight);
-					if(!directed) {
+					if (!directed) {
 						Map<String, Integer> dest = nodes.get(destStr);
-						if(dest.containsKey(sourceStr)&&!sourceStr.equals(destStr) ) {
+						if (dest.containsKey(sourceStr) && !sourceStr.equals(destStr)) {
 							throw new WcbcException("duplicate edge: " + destStr + " " + sourceStr);
 						}
 						dest.put(sourceStr, weight);
@@ -144,8 +149,9 @@ public class Graph {
 	 *            textbook. Examples include "a,b b,c c,a" and "a,b,4 b,c,3".
 	 * @param weighted
 	 *            True if this is a weighted graph and False otherwise.
+	 * @throws WcbcException
 	 */
-	public Graph(String graphString, boolean weighted) {
+	public Graph(String graphString, boolean weighted) throws WcbcException {
 		this(graphString, weighted, true);
 	}
 
@@ -158,9 +164,85 @@ public class Graph {
 	 *            textbook. Examples include "a,b b,c c,a" and "a,b,4 b,c,3".
 	 * @param weighted
 	 *            True if this is a weighted graph and False otherwise.
+	 * @throws WcbcException
 	 */
-	public Graph(String graphString) {
+	public Graph(String graphString) throws WcbcException {
 		this(graphString, true, true);
+	}
+
+	@Override
+	public String toString() {
+		ArrayList<String> edgeStrings = new ArrayList<>();
+		Map<Edge, Integer> edgeMap;
+		try {
+			edgeMap = this.getEdgesAsDict();
+		} catch (WcbcException e) {
+			throw new RuntimeException(e.getMessage());
+		}
+		for (Entry<Edge, Integer> pair : edgeMap.entrySet()) {
+			Edge edge = pair.getKey();
+			Integer weight = pair.getValue();
+			String edgeString = null;
+			if (this.weighted) {
+				edgeString = edge.toString() + "," + weight.toString();
+			} else {
+				edgeString = edge.toString();
+			}
+			edgeStrings.add(edgeString);
+		}
+		
+		ArrayList<String> edgesAndIsolatedNodes = new ArrayList<>(edgeStrings);
+		edgesAndIsolatedNodes.addAll(this.getIsolatedNodes());
+		Collections.sort(edgesAndIsolatedNodes); 
+		String graphString = utils.join(edgesAndIsolatedNodes, " ");
+		return graphString;
+	}
+
+	private Set<String> computeIsolatedNodes() {
+		Set<String> isolated = new HashSet<>(this.nodes.keySet());
+		for (Entry<String, Map<String, Integer>> pair : this.nodes.entrySet()) {
+			String node = pair.getKey();
+			Map<String, Integer> neighbors = pair.getValue();
+			if (neighbors.size() > 0) {
+				isolated.remove(node);
+			}
+			for (String neighbor : neighbors.keySet()) {
+				isolated.remove(neighbor);
+			}
+		}
+		return isolated;
+	}
+
+	private Set<String> getIsolatedNodes() {
+		if (this.isolatedNodes != null) {
+			this.isolatedNodes = computeIsolatedNodes();
+		}
+		return isolatedNodes;
+	}
+
+	private Map<Edge, Integer> getEdgesAsDict() throws WcbcException {
+		Map<Edge, Integer> edges = new HashMap<>();
+		for (Entry<String, Map<String, Integer>> pair : this.nodes.entrySet()) {
+			String node = pair.getKey();
+			Map<String, Integer> neighbors = pair.getValue();
+			for (Entry<String, Integer> pair2 : neighbors.entrySet()) {
+				String neighbor = pair2.getKey();
+				Integer weight = pair2.getValue();
+				String[] edgeNodes = { node, neighbor };
+				String[] reversedEdgeNodes = { neighbor, node };
+				Edge edge = new Edge(edgeNodes);
+				Edge reversedEdge = new Edge(reversedEdgeNodes);
+				// If undirected, store only one direction. By
+				// convention, this will be the lexicographically
+				// earlier one.
+				if (!directed && reversedEdge.compareTo(edge) < 0) {
+					edge = reversedEdge;
+				}
+				// Now store the edge
+				edges.put(edge, weight);
+			}
+		}
+		return edges;
 	}
 
 }

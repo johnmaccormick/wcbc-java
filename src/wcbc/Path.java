@@ -13,7 +13,7 @@ import java.util.NoSuchElementException;
  * A Path object models a path in a graph.
  *
  */
-public class Path implements Iterable<Edge> {
+public class Path implements Iterable<Edge>, Comparable<Path> {
 
 	/**
 	 * List of the nodes in the path, where each node is a string.
@@ -281,6 +281,22 @@ public class Path implements Iterable<Edge> {
 			}
 		}
 		return edgeSet.contains(edge);
+	}
+
+	@Override
+	public int compareTo(Path other) {
+		int thisLength = this.getLength();
+		int otherLength = other.getLength();
+		int minLength = Math.min(thisLength, otherLength);
+		for(int i=0; i<minLength; i++) {
+			String thisNode =this.getNode(i); 
+			String otherNode =other.getNode(i);
+			int cmpVal = thisNode.compareTo(otherNode);
+			if(cmpVal!=0) { // the two nodes are not equal
+				return cmpVal;
+			}
+		}
+		return Integer.compare(thisLength, otherLength);
 	}
 
 }

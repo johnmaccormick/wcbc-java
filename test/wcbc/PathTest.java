@@ -256,5 +256,51 @@ class PathTest {
 		
 		
 	}
+
+	@Test
+	void testCompareTo() throws WcbcException {
+		String[] empty = {};
+		Path p1 = new Path(empty);
+		Path p2 = new Path("a".split(","));
+		Path p3 = new Path("a,b".split(","));
+		Path p4 = new Path("b,a".split(","));
+		Path p5 = new Path("a,b,c".split(","));
+		Path p6 = new Path("a,b,c".split(","));
+		Path p7 = new Path("b,b,c".split(","));
+		Path p8 = new Path("a,b,c,d,e".split(","));
+		Path p9 = new Path("a,b,e,d,e".split(","));
+		Path p10 = new Path("a,b,c,d,f".split(","));
+		
+		assertTrue(p1.compareTo(p1) == 0);
+		assertTrue(p1.compareTo(p2) < 0);
+		assertTrue(p8.compareTo(p1) > 0);
+		assertTrue(p2.compareTo(p3) < 0);
+		assertTrue(p3.compareTo(p4) < 0);
+		assertTrue(p5.compareTo(p6) == 0);
+		assertTrue(p7.compareTo(p6) > 0);
+		assertTrue(p9.compareTo(p8) > 0);
+		assertTrue(p8.compareTo(p10) < 0);
+	}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 	
 }
