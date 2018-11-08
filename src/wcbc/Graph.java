@@ -214,7 +214,7 @@ public class Graph {
 	}
 
 	private Set<String> getIsolatedNodes() {
-		if (this.isolatedNodes != null) {
+		if (this.isolatedNodes == null) {
 			this.isolatedNodes = computeIsolatedNodes();
 		}
 		return isolatedNodes;
