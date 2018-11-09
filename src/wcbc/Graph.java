@@ -245,4 +245,8 @@ public class Graph {
 		return edges;
 	}
 
+	public boolean containsNode(String node) {
+		return nodes.containsKey(node);
+	}
+	
 }
