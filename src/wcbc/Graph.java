@@ -6,8 +6,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+
 import java.util.Set;
 
 /**
@@ -17,7 +19,7 @@ import java.util.Set;
  * The graph may be weighted or unweighted, directed or undirected.
  *
  */
-public class Graph {
+public class Graph implements Iterable<String> {
 
 	/**
 	 * True if this object represents a weighted graph.
@@ -255,8 +257,10 @@ public class Graph {
 	 * The node is added to the graph as an isolated node with no incoming or
 	 * outgoing edges.
 	 * 
-	 * @param node The node to be added.
-	 * @throws WcbcException thrown if the node is already present
+	 * @param node
+	 *            The node to be added.
+	 * @throws WcbcException
+	 *             thrown if the node is already present
 	 */
 	public void addNode(String node) throws WcbcException {
 		if (this.containsNode(node)) {
@@ -277,7 +281,50 @@ public class Graph {
 		}
 		return g;
 	}
-	
-	
 
+	@Override
+	public Iterator<String> iterator() {
+		return this.nodes.keySet().iterator();
+	}
+
+	/**
+	 * Return a set consisting of all nodes in the graph.
+	 * 
+	 * @return a set consisting of all nodes in the graph
+	 */
+	public Set<String> getNodesAsSet() {
+		return this.nodes.keySet();
+	}
+
+	/**
+	 * Return a set of edges in the graph.
+	 * 
+	 * @return a set of edges in the graph
+	 * @throws WcbcException
+	 */
+	private Set<Edge> getEdgesAsSet() throws WcbcException {
+		return this.getEdgesAsDict().keySet();
+	}
+
+	/**
+	 * Return a set of edges in the graph.
+	 * 
+	 * @return a set of edges in the graph
+	 * @throws WcbcException
+	 */
+	public Set<Edge> edges() throws WcbcException {
+		// At present, this is implemented rather inefficiently via getEdgesAsSet(),
+		// which makes a new copy of all the edges. A future implementation could do
+		// something better than this.
+		return this.getEdgesAsSet();
+	}
+
+	/**
+	 * Return the neighbors of a given node.
+	 * @param node The node whose neighbors will be returned
+	 * @return the neighbors of the given node
+	 */
+	public Set<String> neighbors(String node){
+		return this.nodes.get(node).keySet();
+	}
 }

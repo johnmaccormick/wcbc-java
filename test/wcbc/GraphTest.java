@@ -3,6 +3,11 @@ package wcbc;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -256,4 +261,19 @@ class GraphTest {
 		}
 	}
 
+	@Test
+	void testIter() throws WcbcException {
+		String gStr = "b,a,3 a,a,4 a,ccc,5 b,d,6";
+		String[] gNodes = {"a", "b", "ccc", "d"}; 
+		Graph g = new Graph(gStr);
+		List<String> nodes = new ArrayList<>();
+		for(String node: g) {
+			nodes.add(node);
+		}
+		List<String> gNodesList = Arrays.asList(gNodes);
+		Collections.sort(nodes);
+		Collections.sort(gNodesList);
+		assertEquals(nodes, gNodesList);
+	}
+	
 }
