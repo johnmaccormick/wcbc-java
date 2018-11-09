@@ -190,10 +190,10 @@ public class Graph {
 			}
 			edgeStrings.add(edgeString);
 		}
-		
+
 		ArrayList<String> edgesAndIsolatedNodes = new ArrayList<>(edgeStrings);
 		edgesAndIsolatedNodes.addAll(this.getIsolatedNodes());
-		Collections.sort(edgesAndIsolatedNodes); 
+		Collections.sort(edgesAndIsolatedNodes);
 		String graphString = utils.join(edgesAndIsolatedNodes, " ");
 		return graphString;
 	}
@@ -248,5 +248,36 @@ public class Graph {
 	public boolean containsNode(String node) {
 		return nodes.containsKey(node);
 	}
+
+	/**
+	 * Add the given node to the graph.
+	 * 
+	 * The node is added to the graph as an isolated node with no incoming or
+	 * outgoing edges.
+	 * 
+	 * @param node The node to be added.
+	 * @throws WcbcException thrown if the node is already present
+	 */
+	public void addNode(String node) throws WcbcException {
+		if (this.containsNode(node)) {
+			throw new WcbcException("Tried to add existing node " + node);
+		}
+		this.nodes.put(node, new HashMap<String, Integer>());
+		isolatedNodes = null; // force recomputation later, when needed
+	}
+
+	@Override
+	protected Graph clone() throws CloneNotSupportedException {
+		Graph g = null;
+		try {
+			// inefficient, but extremely easy to implement!
+			g = new Graph(this.toString(), this.weighted, this.directed);
+		} catch (WcbcException e) {
+			throw new CloneNotSupportedException(e.getMessage());
+		}
+		return g;
+	}
 	
+	
+
 }
