@@ -120,12 +120,12 @@ class GraphTest {
 		testVals.add(new GraphContainsVals("x,z dd x x,y cc", false, null, "dd", true));
 		testVals.add(new GraphContainsVals("a,a", false, false, "c", false));
 		testVals.add(new GraphContainsVals("a,b", false, false, "c", false));
-		testVals.add(new GraphContainsVals("b,a", false, false, "a", false));
-		testVals.add(new GraphContainsVals("a,b,5", null, null, "", false));
+		testVals.add(new GraphContainsVals("b,a", false, false, "a", true));
+		testVals.add(new GraphContainsVals("a,b,5", null, null, "ab", false));
 		testVals.add(new GraphContainsVals("a11,a11", false, null, "a1", false));
 		testVals.add(new GraphContainsVals("a11,a11,9", null, null, "a11", true));
-		testVals.add(new GraphContainsVals("bb,a,1 a,a,1 a,ccc a,bb,4 bb,d,5", true, false, "ccc", true));
-		testVals.add(new GraphContainsVals("bb,a,1 a,a,1 a,ccc a,bb,4 bb,d,5", true, false, "cc", false));
+		testVals.add(new GraphContainsVals("bb,a,1 a,a,1 a,ccc,3 a,bbb,4 bb,d,5", true, false, "ccc", true));
+		testVals.add(new GraphContainsVals("bb,a,1 a,a,1 a,ccc,3 a,bbb,4 bb,d,5", true, false, "cc", false));
 
 		for (GraphContainsVals v : testVals) {
 			Graph g = null;
