@@ -275,5 +275,42 @@ class GraphTest {
 		Collections.sort(gNodesList);
 		assertEquals(nodes, gNodesList);
 	}
+
+	@Test
+	void testContainsEdge() throws WcbcException {
+		Graph g = new Graph("b,a,3 a,a,4 a,ccc,5 b,d,6");
+		assertTrue(g.containsEdge(new Edge(new String[] {"b", "a"})));
+		assertFalse(g.containsEdge(new Edge(new String[] {"a", "b"})));
+	}
+
+	@Test
+	void testAddEdge() throws WcbcException {
+		Graph g = new Graph("b,a,3 a,a,4 a,ccc,5 b,d,6");
+		Edge e = new Edge(new String[] {"a", "d"});
+		Edge e2 = new Edge(new String[] {"d", "b"});
+		assertFalse(g.containsEdge(e));
+		g.addEdge(e);
+		assertTrue(g.containsEdge(e));
+		g.addEdge(e2,9);
+		assertTrue(g.containsEdge(e2));
+		assertEquals(9, g.getWeight(e2));
+	}
+	
+	@Test
+	void testGetWeight() throws WcbcException {
+		Graph g = new Graph("b,a,3 a,a,4 a,ccc,5 b,d,6");
+		Edge e = new Edge(new String[] {"b", "d"});
+		assertEquals(6, g.getWeight(e));
+	}
+
+	@Test
+	void testRemoveEdge() throws WcbcException {
+		Graph g = new Graph("b,a,3 a,a,4 a,ccc,5 b,d,6");
+		Edge e = new Edge(new String[] {"b", "d"});
+		assertTrue(g.containsEdge(e));
+		g.removeEdge(e);
+		assertFalse(g.containsEdge(e));
+	}
+	
 	
 }

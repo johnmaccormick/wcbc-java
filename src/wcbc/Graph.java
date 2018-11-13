@@ -321,10 +321,182 @@ public class Graph implements Iterable<String> {
 
 	/**
 	 * Return the neighbors of a given node.
-	 * @param node The node whose neighbors will be returned
+	 * 
+	 * @param node
+	 *            The node whose neighbors will be returned
 	 * @return the neighbors of the given node
+	 * @throws WcbcException
 	 */
-	public Set<String> neighbors(String node){
+	public Set<String> neighbors(String node) throws WcbcException {
+		checkContainsNode(node);
 		return this.nodes.get(node).keySet();
 	}
+
+	private void checkContainsNode(String node) throws WcbcException {
+		if (!nodes.containsKey(node)) {
+			throw new WcbcException("node " + node + " not in graph");
+		}
+	}
+
+	private void checkContainsEdge(Edge edge) throws WcbcException {
+		if (!containsEdge(edge)) {
+			throw new WcbcException("edge " + edge + " not in graph");
+		}
+	}
+
+	/**
+	 * Return a dictionary of the neighbors of a given node with weights as keys.
+	 * 
+	 * The neighbors of node n are defined to be all nodes that are at the end of
+	 * outgoing edges from n.
+	 * 
+	 * @param node
+	 *            The node whose neighbors will be returned
+	 * 
+	 * @return the neighbors of the given node. Each key in the dictionary is a
+	 *         neighbor m of n, i.e. there is an edge from n to m. The value
+	 *         corresponding to key m is the weight of the edge n to m.
+	 * @throws WcbcException
+	 */
+	public Map<String, Integer> weightedNeighbors(String node) throws WcbcException {
+		checkContainsNode(node);
+		return this.nodes.get(node);
+	}
+
+	/**
+	 * Return the weight of the given edge.
+	 * 
+	 * @param edge
+	 *            the edge to be searched for
+	 * @return the weight of the given edge.
+	 * @throws WcbcException
+	 *             thrown if the edge is not present
+	 */
+	public int getWeight(Edge edge) throws WcbcException {
+		checkContainsEdge(edge);
+		String node1 = edge.start();
+		String node2 = edge.end();
+		return nodes.get(node1).get(node2);
+	}
+
+	/**
+	 * Add an edge to the graph.
+	 * 
+	 * @param edge
+	 *            the edge to be added
+	 * @param weight
+	 *            the weight of the edge to be added
+	 * @throws WcbcException
+	 *             An exception is thrown if the edge is already present. An
+	 *             exception is also thrown if the edge contains a node that is not
+	 *             in the graph.
+	 */
+	public void addEdge(Edge edge, int weight) throws WcbcException {
+		String node1 = edge.start();
+		String node2 = edge.end();
+		if (this.containsEdge(edge)) {
+			throw new WcbcException("edge " + edge.toString() + " already in graph");
+		}
+		checkContainsNode(node1);
+		checkContainsNode(node2);
+
+		nodes.get(node1).put(node2, weight);
+		if (!directed) {
+			nodes.get(node2).put(node1, weight);
+		}
+		isolatedNodes = null; // force recomputation later, when needed
+	}
+
+	/**
+	 * Add an edge with default weight 1 to the graph.
+	 * 
+	 * @param edge
+	 *            the edge to be added
+	 * @throws WcbcException
+	 *             An exception is thrown if the edge is already present. An
+	 *             exception is also thrown if the edge contains a node that is not
+	 *             in the graph.
+	 */
+	public void addEdge(Edge edge) throws WcbcException {
+		addEdge(edge, 1);
+	}
+
+	/**
+	 * Return True if the graph contains the given edge and False otherwise
+	 * 
+	 * @param edge
+	 *            the edge to be searched for
+	 * @return True if the graph contains the given edge and False otherwise
+	 * @throws WcbcException
+	 */
+	public boolean containsEdge(Edge edge) throws WcbcException {
+		String node1 = edge.start();
+		String node2 = edge.end();
+		if (!this.containsNode(node1) || !this.containsNode(node2)) {
+			return false;
+		}
+		if (nodes.get(node1).containsKey(node2)) {
+			return true;
+		} else if (!directed && nodes.get(node2).containsKey(node1)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Remove an edge from the graph.
+	 * 
+	 * @param edge
+	 *            the edge to be removed
+	 * @throws WcbcException
+	 *             An exception is thrown if the edge is not already present. This
+	 *             implicitly requires that both nodes in the edge are also present.
+	 */
+	public void removeEdge(Edge edge) throws WcbcException {
+		checkContainsEdge(edge);
+		String node1 = edge.start();
+		String node2 = edge.end();
+		if (nodes.get(node1).containsKey(node2)) {
+			nodes.get(node1).remove(node2);
+		}
+		if (!directed) {
+			if (nodes.get(node2).containsKey(node1)) {
+				nodes.get(node2).remove(node1);
+			}
+
+		}
+		isolatedNodes = null; // force recomputation later, when needed
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
