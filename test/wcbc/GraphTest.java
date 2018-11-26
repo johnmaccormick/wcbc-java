@@ -264,10 +264,10 @@ class GraphTest {
 	@Test
 	void testIter() throws WcbcException {
 		String gStr = "b,a,3 a,a,4 a,ccc,5 b,d,6";
-		String[] gNodes = {"a", "b", "ccc", "d"}; 
+		String[] gNodes = { "a", "b", "ccc", "d" };
 		Graph g = new Graph(gStr);
 		List<String> nodes = new ArrayList<>();
-		for(String node: g) {
+		for (String node : g) {
 			nodes.add(node);
 		}
 		List<String> gNodesList = Arrays.asList(gNodes);
@@ -279,38 +279,62 @@ class GraphTest {
 	@Test
 	void testContainsEdge() throws WcbcException {
 		Graph g = new Graph("b,a,3 a,a,4 a,ccc,5 b,d,6");
-		assertTrue(g.containsEdge(new Edge(new String[] {"b", "a"})));
-		assertFalse(g.containsEdge(new Edge(new String[] {"a", "b"})));
+		assertTrue(g.containsEdge(new Edge(new String[] { "b", "a" })));
+		assertFalse(g.containsEdge(new Edge(new String[] { "a", "b" })));
 	}
 
 	@Test
 	void testAddEdge() throws WcbcException {
 		Graph g = new Graph("b,a,3 a,a,4 a,ccc,5 b,d,6");
-		Edge e = new Edge(new String[] {"a", "d"});
-		Edge e2 = new Edge(new String[] {"d", "b"});
+		Edge e = new Edge(new String[] { "a", "d" });
+		Edge e2 = new Edge(new String[] { "d", "b" });
 		assertFalse(g.containsEdge(e));
 		g.addEdge(e);
 		assertTrue(g.containsEdge(e));
-		g.addEdge(e2,9);
+		g.addEdge(e2, 9);
 		assertTrue(g.containsEdge(e2));
 		assertEquals(9, g.getWeight(e2));
 	}
-	
+
 	@Test
 	void testGetWeight() throws WcbcException {
 		Graph g = new Graph("b,a,3 a,a,4 a,ccc,5 b,d,6");
-		Edge e = new Edge(new String[] {"b", "d"});
+		Edge e = new Edge(new String[] { "b", "d" });
 		assertEquals(6, g.getWeight(e));
 	}
 
 	@Test
 	void testRemoveEdge() throws WcbcException {
 		Graph g = new Graph("b,a,3 a,a,4 a,ccc,5 b,d,6");
-		Edge e = new Edge(new String[] {"b", "d"});
+		Edge e = new Edge(new String[] { "b", "d" });
 		assertTrue(g.containsEdge(e));
 		g.removeEdge(e);
 		assertFalse(g.containsEdge(e));
 	}
-	
-	
+
+	@Test
+	void testIsPath() throws WcbcException, CloneNotSupportedException {
+		String graphStr = "a,b,1 b,c,2 c,d,3 d,e,4 e,a,5 c,c,6 z";
+		Graph g1 = new Graph(graphStr, true, true); // directed
+		Graph g2 = new Graph(graphStr, true, false); // undirected
+		Graph g3 = g1.clone();
+		g3.addEdge(new Edge(new String[] { "b", "a" }));
+
+		assertTrue(g1.isPath(new Path(new String[] { "a", "b" })));
+		assertFalse(g1.isPath(new Path(new String[] { "b", "a" })));
+		assertTrue(g2.isPath(new Path(new String[] { "b", "a" })));
+		assertTrue(g1.isPath(new Path(new String[] { "z" })));
+		assertTrue(g1.isPath(new Path(new String[] { "a", "b", "c", "c" })));
+		assertTrue(g2.isPath(new Path(new String[] { "a", "b", "c", "c" })));
+		assertFalse(g1.isPath(new Path(new String[] { "a", "b", "c", "c", "c" })));
+		assertFalse(g2.isPath(new Path(new String[] { "a", "b", "c", "c", "c" })));
+		assertTrue(g1.isPath(new Path(new String[] { "a", "b", "c", "c", "d", "e", "a" })));
+		assertTrue(g2.isPath(new Path(new String[] { "a", "b", "c", "c", "d", "e", "a" })));
+		assertFalse(g1.isPath(new Path(new String[] { "a", "b", "a" })));
+		assertFalse(g2.isPath(new Path(new String[] { "a", "b", "a" })));
+		assertTrue(g3.isPath(new Path(new String[] { "a", "b", "a" })));
+		assertFalse(g3.isPath(new Path(new String[] { "a", "b", "a", "b" })));
+
+	}
+
 }

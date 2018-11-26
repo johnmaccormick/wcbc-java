@@ -469,19 +469,77 @@ public class Graph implements Iterable<String> {
 		isolatedNodes = null; // force recomputation later, when needed
 	}
 
+	/**
+	 * Return true if the given path exists as a simple path in the current graph.
+	 * 
+	 * The path passed in as a parameter is really just a sequence of nodes. The
+	 * question is, does each consecutive pair of nodes in that sequence exist as an
+	 * edge in the current graph? Optionally, we can also check whether the start
+	 * and end of the path correspond to particular nodes.
+	 * 
+	 * Note that this method does not permit paths to have repeated edges i.e. it
+	 * returns True only if the given path is a simple** path. Perhaps the method
+	 * would be better named isSimplePath(), but for the purposes of the textbook we
+	 * are only interested in simple paths and it seems easier to stick with a short
+	 * method name.
+	 * 
+	 * @param path
+	 *            the sequence p of nodes to be investigated
+	 * @param source
+	 *            the name of the node that will be checked to see if it is the
+	 *            start of the path, or null to skip this check
+	 * @param dest
+	 *            the name of the node that will be checked to see if it is the end
+	 *            of the path, or null to skip this check
+	 * @return True if p exists as a simple path in the current graph, and False
+	 *         otherwise. In addition, if source is specified, we return False
+	 *         unless the given source is the start of p. Similarly, if dest is
+	 *         specified, we return False unless the given dest is the end of p.
+	 * @throws WcbcException 
+	 */
+	public boolean isPath(Path path, String source, String dest) throws WcbcException {
+		if(path.getLength()==0) {
+			return true;
+		}
+		if(source==null) {
+			source = path.start();
+		}
+		if(dest==null) {
+			dest = path.end();
+		}
+		if(!path.start().equals(source) || !path.end().equals(dest)) {
+			return false;
+		}
+		
+        // use a set to check for repeated edges, which aren't allowed
+        // in our definition of a path
+        HashSet<Edge> edges = new HashSet<>();
+        for(Edge e:path) {
+        	if(!this.containsEdge(e)) {
+    			return false;        		
+        	}
+            // repeated edges are not allowed
+        	if(edges.contains(e)) {
+    			return false;        		        		
+        	}
+            // remember this edge, and its reverse if this is not a
+            // directed graph
+        	edges.add(e);
+        	if(!this.directed) {
+        		edges.add(e.reversed());
+        	}
+        }
+		return true;
+	}
+
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	/**
+	 * See isPath(Path path, String source, String dest)
+	 * @throws WcbcException
+	 */
+	public boolean isPath(Path path) throws WcbcException {
+		return isPath(path, null, null);
+	}
 	
 	
 	

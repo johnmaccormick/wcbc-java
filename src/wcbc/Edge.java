@@ -26,4 +26,16 @@ public class Edge extends Path {
 		super(nodes);
 		checkValidEdge();
 	}
+
+	@Override
+	public Edge reversed() throws WcbcException {
+		return new Edge(super.reversed().nodes);
+	}
+
+	@Override
+	public Edge rotateToFront(String node) throws WcbcException {
+		return new Edge(super.rotateToFront(node).nodes);
+	}
+	
+	
 }
