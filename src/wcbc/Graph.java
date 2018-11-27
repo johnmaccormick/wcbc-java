@@ -675,4 +675,22 @@ public class Graph implements Iterable<String> {
 		return true;
 	}
 
+	/**
+	 * Return True if the given collection of nodes forms a clique in the current
+	 * graph.
+	 * 
+	 * @param nodes
+	 *            the collection of nodes to be investigated
+	 * @return True if the given collection of nodes forms a clique in the current
+	 *         graph.
+	 */
+	public boolean isClique(Collection<String> nodes) {
+		for(String node1: nodes) {
+			for(String node2: nodes) {
+				
+			}			
+		}
+		return true;
+	}
+
 }
