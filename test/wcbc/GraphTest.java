@@ -335,6 +335,9 @@ class GraphTest {
 		assertTrue(g3.isPath(new Path(new String[] { "a", "b", "a" })));
 		assertFalse(g3.isPath(new Path(new String[] { "a", "b", "a", "b" })));
 
+		assertEquals(true, new Graph("a").isPath(Path.fromString("a")));
+
+		
 	}
 
 	@Test
@@ -383,6 +386,32 @@ class GraphTest {
 		assertTrue(g1.containsAllNodesOnce(new Path(new String[] { })));
 		assertFalse(g1.containsAllNodesOnce(new Path(new String[] { "a"})));
 		assertFalse(g2.containsAllNodesOnce(new Path(new String[] {})));
+		assertFalse(g2.containsAllNodesOnce(new Path(new String[] {"a", "b"})));
+		assertTrue(g2.containsAllNodesOnce(new Path(new String[] { "a"})));
+		assertTrue(g3.containsAllNodesOnce(new Path(new String[] { "a"})));
+		assertTrue(g4.containsAllNodesOnce(new Path(new String[] {"a", "b"})));
+		assertTrue(g5.containsAllNodesOnce(new Path(new String[] {"a", "b", "c", "d","e", "z"})));
+		assertFalse(g5.containsAllNodesOnce(new Path(new String[] {"a", "b", "c", "d","e"})));
 	}
 
+	
+	@Test
+	void testIsHamiltonPath() throws WcbcException, CloneNotSupportedException {
+		String graphStr = "a,b,1 b,c,2 c,d,3 d,e,4 c,c,6";
+		Graph g1 = new Graph(graphStr, true, true); // directed
+		Graph g2 = new Graph(graphStr, true, false); // undirected
+		
+		assertEquals(true, new Graph("").isHamiltonPath(Path.fromString("")));
+		assertEquals(false, new Graph("a").isHamiltonPath(Path.fromString("")));
+		assertEquals(true, new Graph("a").isHamiltonPath(Path.fromString("a")));
+		assertEquals(false, new Graph("a,a,1").isHamiltonPath(Path.fromString("a,a")));
+		assertEquals(false, g1.isHamiltonPath(Path.fromString("a,b")));
+		assertEquals(false, g1.isHamiltonPath(Path.fromString("a,b,c")));
+		assertEquals(false, g2.isHamiltonPath(Path.fromString("a,b,c")));
+		assertEquals(true, g1.isHamiltonPath(Path.fromString("a,b,c,d,e")));
+		assertEquals(true, g2.isHamiltonPath(Path.fromString("a,b,c,d,e")));
+		assertEquals(false, g1.isHamiltonPath(Path.fromString("a,b,c,c,d,e")));
+		assertEquals(false, g2.isHamiltonPath(Path.fromString("a,b,c,c,d,e")));
+	}	
+	
 }

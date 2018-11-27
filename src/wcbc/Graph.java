@@ -614,18 +614,38 @@ public class Graph implements Iterable<String> {
 				return false;
 			}
 		}
-		
+
 		// check that all path nodes are contained in the graph
 		for (String node : path.nodes) {
 			if (!this.containsNode(node)) {
 				return false;
 			}
 		}
-		
+
 		// It's possible that some nodes were repeated. An easy way to
 		// check for this is to see if the number of nodes in the path
 		// is the same as the number of nodes in the graph.
 		if (path.getLength() != this.getNumNodes()) {
+			return false;
+		}
+
+		return true;
+
+	}
+
+	/**
+	 * Return True if the given path is a Hamilton path in the current graph.
+	 * 
+	 * @param path
+	 *            the sequence p of nodes to be investigated
+	 * @return True if p is a Hamilton path in the current graph.
+	 * @throws WcbcException
+	 */
+	public boolean isHamiltonPath(Path path) throws WcbcException {
+		if (!isPath(path)) {
+			return false;
+		}
+		if (!containsAllNodesOnce(path)) {
 			return false;
 		}
 
