@@ -26,6 +26,17 @@ public class Edge extends Path {
 		super(nodes);
 		checkValidEdge();
 	}
+	
+	/**
+	 * Create a new edge between the given nodes
+	 * @param node1 start of the edge
+	 * @param node2 end of the edge
+	 * @throws WcbcException
+	 */
+	public Edge(String node1, String node2) throws WcbcException {
+		this(new String[] {node1, node2});
+	}
+	
 
 	@Override
 	public Edge reversed() throws WcbcException {

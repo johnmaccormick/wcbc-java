@@ -337,4 +337,52 @@ class GraphTest {
 
 	}
 
+	@Test
+	void testIsCycle() throws WcbcException, CloneNotSupportedException {
+		String graphStr = "a,b,1 b,c,2 c,d,3 d,e,4 e,a,5 c,c,6 z";
+		Graph g1 = new Graph(graphStr, true, true); // directed
+		Graph g2 = new Graph(graphStr, true, false); // undirected
+		Graph g3 = g1.clone();
+		g3.addEdge(new Edge(new String[] { "b", "a" }));
+
+		assertFalse(g1.isCycle(new Path(new String[] { "a", "b" })));
+		assertFalse(g1.isCycle(new Path(new String[] { "b", "a" })));
+		assertTrue(g3.isCycle(new Path(new String[] { "a", "b" })));
+		assertFalse(g2.isCycle(new Path(new String[] { "a", "b" })));
+
+		assertFalse(g1.isCycle(new Path(new String[] { "z" })));
+		assertTrue(g1.isCycle(new Path(new String[] { "c" })));
+
+		assertTrue(g1.isCycle(new Path(new String[] { "a", "b", "c", "d", "e" })));
+		assertTrue(g2.isCycle(new Path(new String[] { "a", "b", "c", "d", "e" })));
+		assertTrue(g1.isCycle(new Path(new String[] { "a", "b", "c", "c", "d", "e" })));
+		assertTrue(g2.isCycle(new Path(new String[] { "a", "b", "c", "c", "d", "e" })));
+		assertFalse(g1.isCycle(new Path(new String[] { "a", "b", "c", "c", "d", "e", "a" })));
+		assertFalse(g2.isCycle(new Path(new String[] { "a", "b", "c", "c", "d", "e", "a" })));
+
+		assertFalse(g1.isCycle(new Path(new String[] { "a", "b", "a" })));
+		assertFalse(g2.isCycle(new Path(new String[] { "a", "b", "a" })));
+		assertFalse(g3.isCycle(new Path(new String[] { "a", "b", "a" })));
+		assertFalse(g3.isCycle(new Path(new String[] { "a", "b", "a", "b" })));
+
+	}
+
+	@Test
+	void testContainsAllNodesOnce() throws WcbcException, CloneNotSupportedException {
+		String graphStr1 = "";
+		String graphStr2 = "a";
+		String graphStr3 = "a,a,1";
+		String graphStr4 = "a,b,1";
+		String graphStr5 = "a,b,1 b,c,2 c,d,3 d,e,4 e,a,5 c,c,6 z";
+		Graph g1 = new Graph(graphStr1);
+		Graph g2 = new Graph(graphStr2);
+		Graph g3 = new Graph(graphStr3);
+		Graph g4 = new Graph(graphStr4);
+		Graph g5 = new Graph(graphStr5);
+
+		assertTrue(g1.containsAllNodesOnce(new Path(new String[] { })));
+		assertFalse(g1.containsAllNodesOnce(new Path(new String[] { "a"})));
+		assertFalse(g2.containsAllNodesOnce(new Path(new String[] {})));
+	}
+
 }

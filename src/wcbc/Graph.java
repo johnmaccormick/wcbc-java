@@ -222,6 +222,10 @@ public class Graph implements Iterable<String> {
 		return isolatedNodes;
 	}
 
+	public int getNumNodes() {
+		return nodes.size();
+	}
+
 	private Map<Edge, Integer> getEdgesAsDict() throws WcbcException {
 		Map<Edge, Integer> edges = new HashMap<>();
 		for (Entry<String, Map<String, Integer>> pair : this.nodes.entrySet()) {
@@ -495,66 +499,138 @@ public class Graph implements Iterable<String> {
 	 *         otherwise. In addition, if source is specified, we return False
 	 *         unless the given source is the start of p. Similarly, if dest is
 	 *         specified, we return False unless the given dest is the end of p.
-	 * @throws WcbcException 
+	 * @throws WcbcException
 	 */
 	public boolean isPath(Path path, String source, String dest) throws WcbcException {
-		if(path.getLength()==0) {
+		if (path.getLength() == 0) {
 			return true;
 		}
-		if(source==null) {
+		if (source == null) {
 			source = path.start();
 		}
-		if(dest==null) {
+		if (dest == null) {
 			dest = path.end();
 		}
-		if(!path.start().equals(source) || !path.end().equals(dest)) {
+		if (!path.start().equals(source) || !path.end().equals(dest)) {
 			return false;
 		}
-		
-        // use a set to check for repeated edges, which aren't allowed
-        // in our definition of a path
-        HashSet<Edge> edges = new HashSet<>();
-        for(Edge e:path) {
-        	if(!this.containsEdge(e)) {
-    			return false;        		
-        	}
-            // repeated edges are not allowed
-        	if(edges.contains(e)) {
-    			return false;        		        		
-        	}
-            // remember this edge, and its reverse if this is not a
-            // directed graph
-        	edges.add(e);
-        	if(!this.directed) {
-        		edges.add(e.reversed());
-        	}
-        }
+
+		// use a set to check for repeated edges, which aren't allowed
+		// in our definition of a path
+		HashSet<Edge> edges = new HashSet<>();
+		for (Edge e : path) {
+			if (!this.containsEdge(e)) {
+				return false;
+			}
+			// repeated edges are not allowed
+			if (edges.contains(e)) {
+				return false;
+			}
+			// remember this edge, and its reverse if this is not a
+			// directed graph
+			edges.add(e);
+			if (!this.directed) {
+				edges.add(e.reversed());
+			}
+		}
 		return true;
 	}
 
-	
 	/**
 	 * See isPath(Path path, String source, String dest)
+	 * 
 	 * @throws WcbcException
 	 */
 	public boolean isPath(Path path) throws WcbcException {
 		return isPath(path, null, null);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+	/**
+	 * Return True if the given path exists as a simple cycle in the current graph.
+	 * 
+	 * The path passed in as a parameter is just a sequence of nodes. The question
+	 * is, does each consecutive pair of nodes in that sequence exist as an edge in
+	 * the current graph, and is there also an edge from the final node to the
+	 * initial node?
+	 * 
+	 * Note that this method does not permit cycles to have repeated edges i.e. it
+	 * returns True only if the given cycle is a simple** cycle. Perhaps the method
+	 * would be better named isSimpleCycle(), but for the purposes of the textbook
+	 * we are only interested in simple cycles and it seems easier to stick with a
+	 * short method name.
+	 * 
+	 * Another very important note is our convention for representing cycles: the
+	 * "final edge" (from the last node in the cycle back to the first node) is not
+	 * explicitly represented in the sequence of nodes passed as a parameter. The
+	 * final edge is assumed implicitly to be part of the cycle. If that final edge
+	 * is explicitly present in the passed parameter, this method will return False,
+	 * because it does not in fact represent a cycle once the implicit final edge
+	 * has also been added.
+	 * 
+	 * @param path
+	 *            the sequence p of nodes to be investigated
+	 * @return True if p exists as a simple cycle in the current graph (once the
+	 *         implicit final edge is added), and False otherwise.
+	 * @throws WcbcException
+	 */
+	public boolean isCycle(Path path) throws WcbcException {
+		if (path.getLength() == 0) {
+			return true;
+		}
+		if (!isPath(path)) {
+			return false;
+		}
+
+		Edge finalEdge = new Edge(path.end(), path.start());
+		if (!this.containsEdge(finalEdge)) {
+			return false;
+		}
+
+		// repeated edge is not permitted in a cycle
+		if (path.containsEdge(finalEdge)) {
+			return false;
+		}
+		if (!this.directed && path.containsEdge(finalEdge.reversed())) {
+			return false;
+		}
+
+		return true;
+
+	}
+
+	/**
+	 * Return True if the given path contains all nodes in the current graph exactly
+	 * once.
+	 * 
+	 * @param path
+	 *            the sequence p of nodes to be investigated
+	 * @return True if p contains all nodes in the current graph exactly once.
+	 * @throws WcbcException
+	 */
+	public boolean containsAllNodesOnce(Path path) throws WcbcException {
+		// check that all graph nodes are contained in the path
+		for (String node : nodes.keySet()) {
+			if (!path.containsNode(node)) {
+				return false;
+			}
+		}
+		
+		// check that all path nodes are contained in the graph
+		for (String node : path.nodes) {
+			if (!this.containsNode(node)) {
+				return false;
+			}
+		}
+		
+		// It's possible that some nodes were repeated. An easy way to
+		// check for this is to see if the number of nodes in the path
+		// is the same as the number of nodes in the graph.
+		if (path.getLength() != this.getNumNodes()) {
+			return false;
+		}
+
+		return true;
+
+	}
+
 }
