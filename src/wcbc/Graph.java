@@ -653,4 +653,26 @@ public class Graph implements Iterable<String> {
 
 	}
 
+	/**
+	 * Return True if the given path is a Hamilton cycle in the current graph.
+	 * 
+	 * See the important note in the documentation for isCycle(): the given path
+	 * parameter should not explicitly contain the final edge back to the start of
+	 * the cycle; it will be added implicitly.
+	 * 
+	 * @param path
+	 *            the sequence p of nodes to be investigated
+	 * @return True if p is a Hamilton cycle in the current graph.
+	 * @throws WcbcException
+	 */
+	public boolean isHamiltonCycle(Path path) throws WcbcException {
+		if (!isCycle(path)) {
+			return false;
+		}
+		if (!containsAllNodesOnce(path)) {
+			return false;
+		}
+		return true;
+	}
+
 }

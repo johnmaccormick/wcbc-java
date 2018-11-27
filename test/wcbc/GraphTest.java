@@ -337,7 +337,6 @@ class GraphTest {
 
 		assertEquals(true, new Graph("a").isPath(Path.fromString("a")));
 
-		
 	}
 
 	@Test
@@ -383,24 +382,23 @@ class GraphTest {
 		Graph g4 = new Graph(graphStr4);
 		Graph g5 = new Graph(graphStr5);
 
-		assertTrue(g1.containsAllNodesOnce(new Path(new String[] { })));
-		assertFalse(g1.containsAllNodesOnce(new Path(new String[] { "a"})));
+		assertTrue(g1.containsAllNodesOnce(new Path(new String[] {})));
+		assertFalse(g1.containsAllNodesOnce(new Path(new String[] { "a" })));
 		assertFalse(g2.containsAllNodesOnce(new Path(new String[] {})));
-		assertFalse(g2.containsAllNodesOnce(new Path(new String[] {"a", "b"})));
-		assertTrue(g2.containsAllNodesOnce(new Path(new String[] { "a"})));
-		assertTrue(g3.containsAllNodesOnce(new Path(new String[] { "a"})));
-		assertTrue(g4.containsAllNodesOnce(new Path(new String[] {"a", "b"})));
-		assertTrue(g5.containsAllNodesOnce(new Path(new String[] {"a", "b", "c", "d","e", "z"})));
-		assertFalse(g5.containsAllNodesOnce(new Path(new String[] {"a", "b", "c", "d","e"})));
+		assertFalse(g2.containsAllNodesOnce(new Path(new String[] { "a", "b" })));
+		assertTrue(g2.containsAllNodesOnce(new Path(new String[] { "a" })));
+		assertTrue(g3.containsAllNodesOnce(new Path(new String[] { "a" })));
+		assertTrue(g4.containsAllNodesOnce(new Path(new String[] { "a", "b" })));
+		assertTrue(g5.containsAllNodesOnce(new Path(new String[] { "a", "b", "c", "d", "e", "z" })));
+		assertFalse(g5.containsAllNodesOnce(new Path(new String[] { "a", "b", "c", "d", "e" })));
 	}
 
-	
 	@Test
 	void testIsHamiltonPath() throws WcbcException, CloneNotSupportedException {
 		String graphStr = "a,b,1 b,c,2 c,d,3 d,e,4 c,c,6";
 		Graph g1 = new Graph(graphStr, true, true); // directed
 		Graph g2 = new Graph(graphStr, true, false); // undirected
-		
+
 		assertEquals(true, new Graph("").isHamiltonPath(Path.fromString("")));
 		assertEquals(false, new Graph("a").isHamiltonPath(Path.fromString("")));
 		assertEquals(true, new Graph("a").isHamiltonPath(Path.fromString("a")));
@@ -412,6 +410,39 @@ class GraphTest {
 		assertEquals(true, g2.isHamiltonPath(Path.fromString("a,b,c,d,e")));
 		assertEquals(false, g1.isHamiltonPath(Path.fromString("a,b,c,c,d,e")));
 		assertEquals(false, g2.isHamiltonPath(Path.fromString("a,b,c,c,d,e")));
-	}	
-	
+	}
+
+	@Test
+	void testIsHamiltonCycle() throws WcbcException, CloneNotSupportedException {
+		String graphStr = "a,b,1 b,c,2 c,d,3 d,e,4 c,c,6";
+		Graph g1 = new Graph(graphStr, true, true); // directed
+		Graph g2 = new Graph(graphStr, true, false); // undirected
+		Graph g3 = g1.clone();
+		g3.addEdge(new Edge("e", "a"));
+		Graph g3b = g1.clone();
+		g3b.addEdge(new Edge("a", "e"));
+		Graph g4 = g2.clone();
+		g4.addEdge(new Edge("a", "e"));
+
+		assertEquals(true, new Graph("").isHamiltonCycle(Path.fromString("")));
+		assertEquals(false, new Graph("a").isHamiltonCycle(Path.fromString("")));
+		assertEquals(false, new Graph("a").isHamiltonCycle(Path.fromString("a")));
+		assertEquals(true, new Graph("a,a", false, true).isHamiltonCycle(Path.fromString("a")));
+		assertEquals(true, new Graph("a,a,1").isHamiltonCycle(Path.fromString("a")));
+		assertEquals(false, new Graph("a,a,1").isHamiltonCycle(Path.fromString("a,a")));
+		assertEquals(false, g1.isHamiltonCycle(Path.fromString("a,b")));
+		assertEquals(false, g1.isHamiltonCycle(Path.fromString("a,b,c")));
+		assertEquals(false, g2.isHamiltonCycle(Path.fromString("a,b,c")));
+		assertEquals(false, g1.isHamiltonCycle(Path.fromString("a,b,c,d,e")));
+		assertEquals(false, g2.isHamiltonCycle(Path.fromString("a,b,c,d,e")));
+		assertEquals(true, g3.isHamiltonCycle(Path.fromString("a,b,c,d,e")));
+		assertEquals(false, g3b.isHamiltonCycle(Path.fromString("a,b,c,d,e")));
+		assertEquals(true, g4.isHamiltonCycle(Path.fromString("a,b,c,d,e")));
+		assertEquals(false, g3.isHamiltonCycle(Path.fromString("a,b,c,c,d,e")));
+		assertEquals(false, g4.isHamiltonCycle(Path.fromString("a,b,c,c,d,e")));
+		
+		
+		
+
+	}
 }
