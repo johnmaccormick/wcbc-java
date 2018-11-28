@@ -440,32 +440,28 @@ class GraphTest {
 		assertEquals(true, g4.isHamiltonCycle(Path.fromString("a,b,c,d,e")));
 		assertEquals(false, g3.isHamiltonCycle(Path.fromString("a,b,c,c,d,e")));
 		assertEquals(false, g4.isHamiltonCycle(Path.fromString("a,b,c,c,d,e")));
-		
-		
-		
 
 	}
-	
+
 	private ArrayList<String> cliqueStrToList(String c) {
-		if(c.length()==0) {
+		if (c.length() == 0) {
 			return new ArrayList<String>();
 		} else {
 			return new ArrayList<String>(Arrays.asList(c.split(",")));
 		}
-			
+
 	}
-	
-	
+
 	@Test
 	void testIsClique() throws WcbcException, CloneNotSupportedException {
-	    String graphStr = "a,b,1 b,c,2 c,d,3 d,e,4 a,c,7 a,d,8 c,c,6";
-	    Graph g1 = new Graph(graphStr);
-	    Graph g2 = new Graph(graphStr, true, false);
-	    Graph g1b = g1.clone();
-	    g1b.addEdge(new Edge("b","a"));
-	    g1b.addEdge(new Edge("c","a"));
-	    g1b.addEdge(new Edge("c","b"));
-	    Graph g3 = new Graph("a,b a,c a,d b,c b,d c,d a,e b,e c,e", false, false);
+		String graphStr = "a,b,1 b,c,2 c,d,3 d,e,4 a,c,7 a,d,8 c,c,6";
+		Graph g1 = new Graph(graphStr);
+		Graph g2 = new Graph(graphStr, true, false);
+		Graph g1b = g1.clone();
+		g1b.addEdge(new Edge("b", "a"));
+		g1b.addEdge(new Edge("c", "a"));
+		g1b.addEdge(new Edge("c", "b"));
+		Graph g3 = new Graph("a,b a,c a,d b,c b,d c,d a,e b,e c,e", false, false);
 
 		assertEquals(true, new Graph("").isClique(cliqueStrToList("")));
 		assertEquals(true, new Graph("a").isClique(cliqueStrToList("")));
@@ -474,7 +470,7 @@ class GraphTest {
 		assertEquals(true, new Graph("a,a,1").isClique(cliqueStrToList("a,a")));
 		assertEquals(true, g1.isClique(cliqueStrToList("a")));
 		assertEquals(true, g2.isClique(cliqueStrToList("a")));
-		
+
 		assertEquals(false, g1.isClique(cliqueStrToList("a,b")));
 		assertEquals(true, g2.isClique(cliqueStrToList("a,b")));
 
@@ -487,33 +483,80 @@ class GraphTest {
 		assertEquals(true, g1b.isClique(cliqueStrToList("a,b")));
 		assertEquals(true, g1b.isClique(cliqueStrToList("a,b,c")));
 		assertEquals(false, g1b.isClique(cliqueStrToList("a,b,c,d")));
-		
+
 		assertEquals(true, g3.isClique(cliqueStrToList("a,b,c,d")));
 		assertEquals(false, g3.isClique(cliqueStrToList("a,b,c,d,e")));
-		
 
+	}
+
+	@Test
+	void testConvertToWeighted() throws WcbcException {
+		Graph g1 = new Graph("a,b a,c a,d", false, false);
+		Graph g2 = new Graph("a,b a,c a,d", false, true);
+		Graph g3 = new Graph("a,b,1 a,c,1 a,d,1", true, false);
+		Graph g4 = new Graph("a,b,1 a,c,1 a,d,1", true, true);
+
+		g1.convertToWeighted();
+		assertEquals(g1, g3);
+		g2.convertToWeighted();
+		assertEquals(g2, g4);
+	}
+
+	@Test
+	void testConvertToDirected() throws WcbcException {
+		Graph g1 = new Graph("a,b a,c a,d", false, false);
+		Graph g2 = new Graph("a,b a,c a,d b,a c,a d,a", false, true);
+		Graph g3 = new Graph("a,b,1 a,c,1 a,d,1", true, false);
+		Graph g4 = new Graph("a,b,1 a,c,1 a,d,1 b,a,1 c,a,1 d,a,1", true, true);
+
+		g1.convertToDirected();
+		assertEquals(g1, g2);
+		g3.convertToDirected();
+		assertEquals(g3, g4);
+	}
+
+	@Test
+	void testPathLength() throws WcbcException {
+		String graphStr = "a,b,1 b,c,2 c,d,3 d,e,4 e,a,5 c,c,6 z";
+		Graph g1 = new Graph(graphStr);
+		Graph g2 = new Graph(graphStr, true, false);
+		boolean threwException = false;
+
+		assertEquals(0, new Graph("").pathLength(Path.fromString("")));
+		assertEquals(0, new Graph("a").pathLength(Path.fromString("")));
+		assertEquals(0, new Graph("a").pathLength(Path.fromString("a")));
+		assertEquals(1, new Graph("a,a,1").pathLength(Path.fromString("a,a")));
+
+		threwException = false;
+		try {
+			g1.pathLength(Path.fromString("a,d"));
+		} catch (WcbcException e) {
+			if (e.getMessage().contains(Graph.noPathMsg)) {
+				threwException = true;
+			}
+		}
+		assertTrue(threwException);
+
+		assertEquals(1, g1.pathLength(Path.fromString("a,b")));
+		
+		threwException = false;
+		try {
+			g1.pathLength(Path.fromString("b,a"));
+		} catch (WcbcException e) {
+			if (e.getMessage().contains(Graph.noPathMsg)) {
+				threwException = true;
+			}
+		}
+		assertTrue(threwException);
+		
+		assertEquals(1, g2.pathLength(Path.fromString("b,a")));
+		
+		assertEquals(10, g1.pathLength(Path.fromString("a,b,c,d,e")));
+		assertEquals(10, g2.pathLength(Path.fromString("a,b,c,d,e")));
+		assertEquals(16, g1.pathLength(Path.fromString("a,b,c,c,d,e")));
+		assertEquals(16, g2.pathLength(Path.fromString("a,b,c,c,d,e")));
 		
 		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 }

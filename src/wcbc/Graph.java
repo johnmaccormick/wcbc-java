@@ -683,19 +683,105 @@ public class Graph implements Iterable<String> {
 	 *            the collection of nodes to be investigated
 	 * @return True if the given collection of nodes forms a clique in the current
 	 *         graph.
-	 * @throws WcbcException 
+	 * @throws WcbcException
 	 */
 	public boolean isClique(Collection<String> nodes) throws WcbcException {
-		for(String node1: nodes) {
-			for(String node2: nodes) {
-				if(!node1.equals(node2)) {
-					if(!this.containsEdge(new Edge(node1, node2))) {
+		for (String node1 : nodes) {
+			for (String node2 : nodes) {
+				if (!node1.equals(node2)) {
+					if (!this.containsEdge(new Edge(node1, node2))) {
 						return false;
 					}
 				}
-			}			
+			}
 		}
 		return true;
+	}
+
+	/**
+	 * Convert the current graph to a weighted graph.
+	 * 
+	 * If the graph is already weighted, it will be unchanged. If it is unweighted,
+	 * it will now be a weighted graph with the default weight of 1 for each edge.
+	 */
+	public void convertToWeighted() {
+		this.weighted = true; // slightly evil hack. works fine because
+		// all graphs are stored internally as
+		// weighted graphs.
+	}
+
+	/**
+	 * Convert the current graph to a directed graph.
+	 * 
+	 * If the graph is already directed, it will be unchanged. If it is undirected,
+	 * it will now be an equivalent directed graph constructed by replacing each
+	 * undirected edge with two directed edges between the same nodes, one in each
+	 * direction.
+	 */
+	public void convertToDirected() {
+		this.directed = true; // slightly evil hack. works fine because
+		// all graphs are stored internally as
+		// directed graphs.
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (directed ? 1231 : 1237);
+		result = prime * result + ((nodes == null) ? 0 : nodes.hashCode());
+		result = prime * result + (weighted ? 1231 : 1237);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof Graph))
+			return false;
+		Graph other = (Graph) obj;
+		if (directed != other.directed)
+			return false;
+		if (nodes == null) {
+			if (other.nodes != null)
+				return false;
+		} else if (!nodes.equals(other.nodes))
+			return false;
+		if (weighted != other.weighted)
+			return false;
+		return true;
+	}
+	
+	static final String noPathMsg = " is not a path in the graph ";
+
+	/**
+	 * Return the "length" of the given path (i.e. total weight of its edges)
+	 * 
+	 * For unweighted graphs, the length of the path is the number of edges in it.
+	 * For weighted graphs, the "length" is the total weight of its edges. If the
+	 * given path is not in fact a path in the current graph, an exception is
+	 * raised.
+	 * 
+	 * @param path
+	 *            the sequence p of nodes to be investigated
+	 * @return the total weight of the edges in the path
+	 * @throws WcbcException
+	 *             If the given path is not in fact a path in the current graph, an
+	 *             exception is raised.
+	 */
+	public int pathLength(Path path) throws WcbcException {
+		if (!isPath(path)) {
+			throw new WcbcException(path.toString() + noPathMsg + this.toString());
+		}
+		int length = 0;
+		for (Edge edge : path) {
+			length += getWeight(edge);
+		}
+		return length;
+
 	}
 
 }
