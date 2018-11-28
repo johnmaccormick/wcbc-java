@@ -445,4 +445,75 @@ class GraphTest {
 		
 
 	}
+	
+	private ArrayList<String> cliqueStrToList(String c) {
+		if(c.length()==0) {
+			return new ArrayList<String>();
+		} else {
+			return new ArrayList<String>(Arrays.asList(c.split(",")));
+		}
+			
+	}
+	
+	
+	@Test
+	void testIsClique() throws WcbcException, CloneNotSupportedException {
+	    String graphStr = "a,b,1 b,c,2 c,d,3 d,e,4 a,c,7 a,d,8 c,c,6";
+	    Graph g1 = new Graph(graphStr);
+	    Graph g2 = new Graph(graphStr, true, false);
+	    Graph g1b = g1.clone();
+	    g1b.addEdge(new Edge("b","a"));
+	    g1b.addEdge(new Edge("c","a"));
+	    g1b.addEdge(new Edge("c","b"));
+	    Graph g3 = new Graph("a,b a,c a,d b,c b,d c,d a,e b,e c,e", false, false);
+
+		assertEquals(true, new Graph("").isClique(cliqueStrToList("")));
+		assertEquals(true, new Graph("a").isClique(cliqueStrToList("")));
+		assertEquals(true, new Graph("a").isClique(cliqueStrToList("a")));
+		assertEquals(true, new Graph("a,a,1").isClique(cliqueStrToList("a")));
+		assertEquals(true, new Graph("a,a,1").isClique(cliqueStrToList("a,a")));
+		assertEquals(true, g1.isClique(cliqueStrToList("a")));
+		assertEquals(true, g2.isClique(cliqueStrToList("a")));
+		
+		assertEquals(false, g1.isClique(cliqueStrToList("a,b")));
+		assertEquals(true, g2.isClique(cliqueStrToList("a,b")));
+
+		assertEquals(false, g1.isClique(cliqueStrToList("a,b,c")));
+		assertEquals(true, g2.isClique(cliqueStrToList("a,b,c")));
+
+		assertEquals(false, g1.isClique(cliqueStrToList("a,b,c,d")));
+		assertEquals(false, g2.isClique(cliqueStrToList("a,b,c,d")));
+
+		assertEquals(true, g1b.isClique(cliqueStrToList("a,b")));
+		assertEquals(true, g1b.isClique(cliqueStrToList("a,b,c")));
+		assertEquals(false, g1b.isClique(cliqueStrToList("a,b,c,d")));
+		
+		assertEquals(true, g3.isClique(cliqueStrToList("a,b,c,d")));
+		assertEquals(false, g3.isClique(cliqueStrToList("a,b,c,d,e")));
+		
+
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

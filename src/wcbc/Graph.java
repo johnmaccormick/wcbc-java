@@ -683,11 +683,16 @@ public class Graph implements Iterable<String> {
 	 *            the collection of nodes to be investigated
 	 * @return True if the given collection of nodes forms a clique in the current
 	 *         graph.
+	 * @throws WcbcException 
 	 */
-	public boolean isClique(Collection<String> nodes) {
+	public boolean isClique(Collection<String> nodes) throws WcbcException {
 		for(String node1: nodes) {
 			for(String node2: nodes) {
-				
+				if(!node1.equals(node2)) {
+					if(!this.containsEdge(new Edge(node1, node2))) {
+						return false;
+					}
+				}
 			}			
 		}
 		return true;
