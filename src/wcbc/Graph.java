@@ -304,7 +304,7 @@ public class Graph implements Iterable<String> {
 	 * Return a set of edges in the graph.
 	 * 
 	 * @return a set of edges in the graph
-	 * @throws WcbcException
+	 * @throws WcbcException 
 	 */
 	private Set<Edge> getEdgesAsSet() throws WcbcException {
 		return this.getEdgesAsDict().keySet();
@@ -314,7 +314,7 @@ public class Graph implements Iterable<String> {
 	 * Return a set of edges in the graph.
 	 * 
 	 * @return a set of edges in the graph
-	 * @throws WcbcException
+	 * @throws WcbcException 
 	 */
 	public Set<Edge> edges() throws WcbcException {
 		// At present, this is implemented rather inefficiently via getEdgesAsSet(),
@@ -754,7 +754,7 @@ public class Graph implements Iterable<String> {
 			return false;
 		return true;
 	}
-	
+
 	static final String noPathMsg = " is not a path in the graph ";
 
 	/**
@@ -781,6 +781,71 @@ public class Graph implements Iterable<String> {
 			length += getWeight(edge);
 		}
 		return length;
+
+	}
+
+	static final String noCycleMsg = " is not a cycle in the graph ";
+
+	/**
+	 * Return the "length" of the given cycle (i.e. total weight of its edges)
+	 * 
+	 * For unweighted graphs, the length of the cycle is the number of edges in it.
+	 * For weighted graphs, the "length" is the total weight of its edges.
+	 * 
+	 * See the important note in the documentation for isCycle(): the given cycle
+	 * parameter should not explicitly contain the final edge back to the start of
+	 * the cycle; it will be added implicitly.
+	 * 
+	 * @param cycle
+	 *            the sequence p of nodes to be investigated
+	 * @return the total weight of the edges in the cycle
+	 * @throws WcbcException
+	 *             If the given cycle is not in fact a cycle in the current graph,
+	 *             an exception is raised.
+	 */
+	public int cycleLength(Path cycle) throws WcbcException {
+		if (!isCycle(cycle)) {
+			throw new WcbcException(cycle.toString() + noCycleMsg + this.toString());
+		}
+		if (cycle.getLength() == 0) {
+			return 0;
+		}
+		int pathLen = this.pathLength(cycle);
+		Edge finalEdge = new Edge(cycle.end(), cycle.start());
+		return pathLen + getWeight(finalEdge);
+	}
+
+	/**
+	 * Return an arbitrary node in the current graph
+	 * 
+	 * @return an arbitrary node in the current graph, or null if the graph contains
+	 *         no nodes.
+	 */
+	public String chooseNode() {
+		// use a for loop to choose the "first" node in the dictionary
+		// of nodes...
+		for (String node : this.nodes.keySet()) {
+			return node;
+		}
+		// ...or null if no nodes
+		return null;
+	}
+
+	/**
+	 * Return the total weight of all edges in the graph.
+	 * 
+	 * For unweighted graphs, each edge has an implicit weight of 1.
+	 * 
+	 * @return the total weight of all edges in the graph.
+	 * @throws WcbcException 
+	 */
+	public int sumEdgeWeights() throws WcbcException {
+		int total = 0;
+		for (Edge edge : this.edges()) {
+			total+= getWeight(edge);
+		}
+		
+		return total;
 
 	}
 

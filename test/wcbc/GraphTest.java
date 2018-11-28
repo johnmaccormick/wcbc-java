@@ -367,6 +367,9 @@ class GraphTest {
 		assertFalse(g3.isCycle(new Path(new String[] { "a", "b", "a" })));
 		assertFalse(g3.isCycle(new Path(new String[] { "a", "b", "a", "b" })));
 
+		assertEquals(true, new Graph("a,a,1").isCycle(Path.fromString("a")));
+		assertEquals(false, new Graph("a,a,1").isCycle(Path.fromString("a,a")));
+
 	}
 
 	@Test
@@ -538,7 +541,7 @@ class GraphTest {
 		assertTrue(threwException);
 
 		assertEquals(1, g1.pathLength(Path.fromString("a,b")));
-		
+
 		threwException = false;
 		try {
 			g1.pathLength(Path.fromString("b,a"));
@@ -548,15 +551,100 @@ class GraphTest {
 			}
 		}
 		assertTrue(threwException);
-		
+
 		assertEquals(1, g2.pathLength(Path.fromString("b,a")));
-		
+
 		assertEquals(10, g1.pathLength(Path.fromString("a,b,c,d,e")));
 		assertEquals(10, g2.pathLength(Path.fromString("a,b,c,d,e")));
 		assertEquals(16, g1.pathLength(Path.fromString("a,b,c,c,d,e")));
 		assertEquals(16, g2.pathLength(Path.fromString("a,b,c,c,d,e")));
-		
-		
+
+	}
+
+	@Test
+	void testCycleLength() throws WcbcException {
+		String graphStr = "a,b,1 b,c,2 c,d,3 d,e,4 e,a,5 c,c,6 z";
+		Graph g1 = new Graph(graphStr);
+		Graph g2 = new Graph(graphStr, true, false);
+		boolean threwException = false;
+
+		assertEquals(0, new Graph("").cycleLength(Path.fromString("")));
+		assertEquals(0, new Graph("a").cycleLength(Path.fromString("")));
+
+		threwException = false;
+		try {
+			new Graph("a").cycleLength(Path.fromString("a"));
+		} catch (WcbcException e) {
+			if (e.getMessage().contains(Graph.noCycleMsg)) {
+				threwException = true;
+			}
+		}
+		assertTrue(threwException);
+
+		assertEquals(1, new Graph("a,a,1").cycleLength(Path.fromString("a")));
+
+		threwException = false;
+		try {
+			new Graph("a,a,1").cycleLength(Path.fromString("a,a"));
+		} catch (WcbcException e) {
+			if (e.getMessage().contains(Graph.noCycleMsg)) {
+				threwException = true;
+			}
+		}
+		assertTrue(threwException);
+
+		threwException = false;
+		try {
+			g1.cycleLength(Path.fromString("a,d"));
+		} catch (WcbcException e) {
+			if (e.getMessage().contains(Graph.noCycleMsg)) {
+				threwException = true;
+			}
+		}
+		assertTrue(threwException);
+
+		threwException = false;
+		try {
+			g1.cycleLength(Path.fromString("a,b"));
+		} catch (WcbcException e) {
+			if (e.getMessage().contains(Graph.noCycleMsg)) {
+				threwException = true;
+			}
+		}
+		assertTrue(threwException);
+
+		assertEquals(6, g1.cycleLength(Path.fromString("c")));
+
+		assertEquals(15, g1.cycleLength(Path.fromString("a,b,c,d,e")));
+		assertEquals(15, g2.cycleLength(Path.fromString("a,b,c,d,e")));
+
+	}
+
+	@Test
+	void testChooseNode() throws WcbcException {
+		assertEquals(null, new Graph("").chooseNode());
+		assertEquals("a", new Graph("a").chooseNode());
+		assertEquals("a", new Graph("a,a,1").chooseNode());
+
+		Set<String> nodes = new HashSet<>(Arrays.asList("a", "b"));
+		String chosen = new Graph("a,b,1").chooseNode();
+		assertTrue(nodes.contains(chosen));
+
+		nodes = new HashSet<>(Arrays.asList("a", "b", "c"));
+		chosen = new Graph("a,b,1 b,c,1").chooseNode();
+		assertTrue(nodes.contains(chosen));
+	}
+
+	@Test
+	void testSumEdgeWeights() throws WcbcException {
+		assertEquals(0, new Graph("").sumEdgeWeights());
+		assertEquals(0, new Graph("a").sumEdgeWeights());
+		assertEquals(5, new Graph("a,a,5").sumEdgeWeights());
+		assertEquals(3, new Graph("a,b a,c a,d", false, false).sumEdgeWeights());
+		assertEquals(3, new Graph("a,b a,c a,d", false, true).sumEdgeWeights());
+		assertEquals(6, new Graph("a,b,1 a,c,2 a,d,3", true, false).sumEdgeWeights());
+		assertEquals(10, new Graph("a,b,1 a,c,2 a,d,3 b,a,4", true, true).sumEdgeWeights());
+
 	}
 
 }
