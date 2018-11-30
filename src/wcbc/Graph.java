@@ -304,7 +304,7 @@ public class Graph implements Iterable<String> {
 	 * Return a set of edges in the graph.
 	 * 
 	 * @return a set of edges in the graph
-	 * @throws WcbcException 
+	 * @throws WcbcException
 	 */
 	private Set<Edge> getEdgesAsSet() throws WcbcException {
 		return this.getEdgesAsDict().keySet();
@@ -314,7 +314,7 @@ public class Graph implements Iterable<String> {
 	 * Return a set of edges in the graph.
 	 * 
 	 * @return a set of edges in the graph
-	 * @throws WcbcException 
+	 * @throws WcbcException
 	 */
 	public Set<Edge> edges() throws WcbcException {
 		// At present, this is implemented rather inefficiently via getEdgesAsSet(),
@@ -336,7 +336,15 @@ public class Graph implements Iterable<String> {
 		return this.nodes.get(node).keySet();
 	}
 
-	private void checkContainsNode(String node) throws WcbcException {
+	/**
+	 * Throw an exception if the given node is not in this graph.
+	 * 
+	 * @param node
+	 *            The node to search for.
+	 * @throws WcbcException
+	 *             If the node is not present in the graph.
+	 */
+	public void checkContainsNode(String node) throws WcbcException {
 		if (!nodes.containsKey(node)) {
 			throw new WcbcException("node " + node + " not in graph");
 		}
@@ -837,14 +845,14 @@ public class Graph implements Iterable<String> {
 	 * For unweighted graphs, each edge has an implicit weight of 1.
 	 * 
 	 * @return the total weight of all edges in the graph.
-	 * @throws WcbcException 
+	 * @throws WcbcException
 	 */
 	public int sumEdgeWeights() throws WcbcException {
 		int total = 0;
 		for (Edge edge : this.edges()) {
-			total+= getWeight(edge);
+			total += getWeight(edge);
 		}
-		
+
 		return total;
 
 	}

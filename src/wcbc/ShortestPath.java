@@ -27,12 +27,6 @@ import java.util.Map.Entry;
  */
 public class ShortestPath implements Siso {
 
-	private void checkContainsNode(Graph g, String node) throws WcbcException {
-		if (!g.containsNode(node)) {
-			throw new WcbcException("graph does not contain node " + node);
-		}
-	}
-
 	class ShortestAndPredMaps {
 		HashMap<String, Integer> shortest = new HashMap<>();
 		HashMap<String, String> predecessor = new HashMap<>();
@@ -52,8 +46,8 @@ public class ShortestPath implements Siso {
 		String dest = components[2];
 		Graph graph = new Graph(graphStr, true, false);
 
-		checkContainsNode(graph, source);
-		checkContainsNode(graph, dest);
+		graph.checkContainsNode(source);
+		graph.checkContainsNode(dest);
 
 		// Bellman-Ford works on directed graphs.
 		graph.convertToDirected();
