@@ -226,7 +226,7 @@ public class Graph implements Iterable<String> {
 		return nodes.size();
 	}
 
-	private Map<Edge, Integer> getEdgesAsDict() throws WcbcException {
+	public Map<Edge, Integer> getEdgesAsDict() throws WcbcException {
 		Map<Edge, Integer> edges = new HashMap<>();
 		for (Entry<String, Map<String, Integer>> pair : this.nodes.entrySet()) {
 			String node = pair.getKey();
