@@ -12,3 +12,9 @@ cache ssh credentials:
 
 eval `ssh-agent -s`
 ssh-add ~/.ssh/*_rsa
+
+delete remote branch:
+
+git push --delete origin ch11
+
+

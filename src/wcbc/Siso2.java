@@ -7,9 +7,9 @@ import java.io.IOException;
  * 
  * The WCBC book describes the concept known as a SISO program, which stands for
  * "string in string out." Most SISO programs receive only a single parameter,
- * but sometimes we need to parameters. Siso2.java is an interface providing the
- * abstract function siso2(), which receives two String parameters and returns a
- * String object. Often, the two parameters passed to a siso2 function consist
+ * but sometimes we need two parameters. Siso2.java is an interface providing the
+ * abstract function siso(), which receives two String parameters and returns a
+ * String object. Often, the two parameters passed to a siso function consist
  * of a Java program P and and input string I.
  *
  */

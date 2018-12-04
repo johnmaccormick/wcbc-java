@@ -95,6 +95,20 @@ public class utils {
 	}
 
 	/**
+	 * Check that there are at least three string argument for a SISO3 function.
+	 * 
+	 * @param args
+	 *            The commandline arguments passed to a SISO3 program.
+	 */
+	public static void checkSiso3Args(String[] args) {
+		if (args.length < 3) {
+			System.out.println("Error: SISO3 programs require at least three string arguments.");
+			System.exit(-1);
+		}
+
+	}
+
+	/**
 	 * Given the source code of a SISO Java program as a string, extract the name of
 	 * the class defined by the program.
 	 * 
@@ -327,8 +341,8 @@ public class utils {
 			throws WcbcException {
 		final int maxThreads = 500;
 		if (threads.size() + java.lang.Thread.activeCount() > maxThreads) {
-			final String message = "Fatal error in waitForOnePosOrAllNeg: you attempted to run more than" + maxThreads
-					+ "threads simultaneously.  \n" + "In theory this isn't a problem, but in practice your Python\n"
+			final String message = "Fatal error in waitForOnePosOrAllNeg: you attempted to run more than " + maxThreads
+					+ " threads simultaneously.  \n" + "In theory this isn't a problem, but in practice your Python\n"
 					+ "implementation may encounter difficulties. To avoid these potential\n"
 					+ "problems, all threads will now be killed.";
 			System.out.println(message);
