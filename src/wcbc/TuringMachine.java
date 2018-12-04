@@ -688,7 +688,7 @@ public class TuringMachine {
 	}
 
 	// Perform one computational step for this Turing machine.
-	private void step() throws WcbcException {
+	public void step() throws WcbcException {
 		ArrayList<Transition> ts = this.getValidTransitions();
 		if (ts.size() > 1) {
 			String message = "***Error***: multiple valid transitions in deterministic Turing machine.\n"
@@ -705,6 +705,12 @@ public class TuringMachine {
 		if (this.blocks.containsKey(this.state)) {
 			this.runBlock();
 		}
+	}
+
+	
+	
+	public boolean isHalted() {
+		return halted;
 	}
 
 	@Override
@@ -969,6 +975,10 @@ public class TuringMachine {
 			}
 		}
 
+	}
+
+	public int getSteps() {
+		return steps;
 	}
 
 	/**

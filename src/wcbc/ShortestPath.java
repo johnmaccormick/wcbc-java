@@ -21,7 +21,7 @@ import java.util.Map.Entry;
  * 
  * Example:
  * 
- * > java wcbc/shortestPath "a,b,5 b,c,6 c,d,8 d,a,9 a,c,1 d,b,2 ; a; d"
+ * > java wcbc/ShortestPath "a,b,5 b,c,6 c,d,8 d,a,9 a,c,1 d,b,2 ; a; d"
  * 
  * "7"
  */
