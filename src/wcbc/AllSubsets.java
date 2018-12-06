@@ -35,7 +35,7 @@ public class AllSubsets implements Siso {
 		// the elements from which we can construct subsets
 		String[] elems = {}; // handle empty string separately...
 		if (!inString.equals("")) {
-			elems = inString.split("\\s+");;
+			elems = utils.splitOnWhitespace(inString);
 		}
 		// start with an empty list of subsets
 		ArrayList<Collection<String>> theSubsets = new ArrayList<>();

@@ -23,7 +23,7 @@ public class Multiply implements Siso {
 	 */
 	@Override
 	public String siso(String inString) {
-		String[] numbersAsStr = inString.split("\\s+");
+		String[] numbersAsStr = utils.splitOnWhitespace(inString);
 		long[] numbers = new long[2];
 		for (int i = 0; i < 2; i++) {
 			numbers[i] = Long.parseLong(numbersAsStr[i]);

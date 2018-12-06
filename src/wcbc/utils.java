@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * Utilities for the wcbc package.
@@ -202,6 +204,34 @@ public class utils {
 			end = sb.length();
 		}
 		return sb.substring(0, end);
+	}
+
+	public static String joinInts(Collection<Integer> c, String glue) {
+		List<String> intStrings = new ArrayList<>();
+		for (Integer i : c) {
+			intStrings.add(i.toString());
+		}
+		return join(intStrings, glue);
+	}
+
+	/**
+	 * Split a string using String.split(), but return an empty array on the empty
+	 * string.
+	 * 
+	 * @param target
+	 *            The string to be split
+	 * @param separator
+	 *            The separator to be used for splitting
+	 * @return An array of the separated components
+	 */
+	public static String[] splitCheckEmpty(String target, String separator) {
+		String[] components;
+		if (target.length() == 0) {
+			components = new String[] {};
+		} else {
+			components = target.split(separator);
+		}
+		return components;
 	}
 
 	/**
@@ -422,14 +452,65 @@ public class utils {
 	// return join(strings, " ");
 	// }
 
+	public static String[] splitOnWhitespace(String s) {
+		return splitCheckEmpty(s, "\\s+");
+	}
+
+	public static List<String> splitOnWhitespaceList(String s) {
+		return Arrays.asList(splitOnWhitespace(s));
+	}
+
+	public static IntStream integerStreamFromString(String s) {
+		List<String> intStrs = splitOnWhitespaceList(s);
+		IntStream intStream = intStrs.stream().mapToInt(Integer::valueOf);
+		return intStream;
+	}
+
+	/**
+	 * Split the given string on whitespace, convert each component to an integer
+	 * and return an array of those integers. The input must consist only of strings
+	 * representing integers separated by whitespace.
+	 * 
+	 * @param s
+	 *            The string that will be split
+	 * @return an array of the integers in s
+	 */
+	public static int[] intArrayFromString(String s) {
+		return integerStreamFromString(s).toArray();
+	}
+
+	public static List<Integer> intListFromString(String s) {
+		// there must be of much better way of doing this, but let's stick with
+		// something that works for now
+		ArrayList<Integer> intList = new ArrayList<>();
+		int[] intArray = intArrayFromString(s);
+		for (Integer i : intArray) {
+			intList.add(i);
+		}
+		return intList;
+	}
+
+	/**
+	 * Split the given string on whitespace, convert each component to an integer
+	 * and return the sum of those integers. The input must consist only of strings
+	 * representing integers separated by whitespace.
+	 * 
+	 * @param s
+	 *            The string that will be split and summed
+	 * @return the sum of the integers in s
+	 */
+	public static int sumIntsInString(String s) {
+		return integerStreamFromString(s).sum();
+	}
+
 	public static void main(String[] args) throws IOException, WcbcException, InterruptedException {
-		String[] set1 = { "abc", "d", "ef" };
-		String[] set2 = { "w", "xy", "z" };
-		ArrayList<Collection<String>> sets = new ArrayList<>();
-		sets.add(Arrays.asList(set1));
-		sets.add(Arrays.asList(set2));
-		String formattedSets = formatSetOfSets(sets);
-		System.out.println(formattedSets);
+		// String[] set1 = { "abc", "d", "ef" };
+		// String[] set2 = { "w", "xy", "z" };
+		// ArrayList<Collection<String>> sets = new ArrayList<>();
+		// sets.add(Arrays.asList(set1));
+		// sets.add(Arrays.asList(set2));
+		// String formattedSets = formatSetOfSets(sets);
+		// System.out.println(formattedSets);
 
 		// String[] c = {"abc", "def", "ghi"};
 		// ArrayList<String> cArr = new ArrayList<>(Arrays.asList(c));
@@ -458,8 +539,16 @@ public class utils {
 
 		// utils.writeFile(utils.prependWcbcPath("test.txt"), "asdf");
 
-		utils.loop();
+		// utils.loop();
 
+//		int[] iArr = intArrayFromString("4 5 asd 6");
+//		System.out.println(iArr.length);
+
+		// System.out.println(splitOnWhitespace("").length);
+
+		System.out.println("".split(",").length);
+		System.out.println(splitCheckEmpty("", ",") .length);
+		
 	}
 
 }

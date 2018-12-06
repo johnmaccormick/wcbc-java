@@ -146,7 +146,7 @@ public class Path implements Iterable<Edge>, Comparable<Path> {
 	public static Path fromString(String pathStr) throws WcbcException {
 		ArrayList<String> nodes = new ArrayList<>();
 		if (pathStr.length() > 0) {
-			nodes.addAll(Arrays.asList(pathStr.split(",")));
+			nodes.addAll(Arrays.asList(utils.splitCheckEmpty(pathStr, ",")));
 		}
 		return new Path(nodes);
 	}

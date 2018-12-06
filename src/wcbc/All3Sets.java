@@ -32,7 +32,7 @@ public class All3Sets implements Siso {
 	@Override
 	public String siso(String inString) {
 		// the elements from which we can construct subsets
-		String[] elems = inString.split("\\s+");
+		String[] elems = utils.splitOnWhitespace(inString);
 		// start with an empty list of 3-sets
 		ArrayList<Collection<String>> threeSets = new ArrayList<>();
 		// append each 3-set to the list threeSets

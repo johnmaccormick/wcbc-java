@@ -27,7 +27,7 @@ public class MatchingCharIndices implements Siso {
 	@Override
 	public String siso(String inString) throws WcbcException, IOException {
 		// split the input into a list of 2 words
-		String[] words = inString.split("\\s+");
+		String[] words = utils.splitOnWhitespace(inString);
 		String word1 = words[0];
 		String word2 = words[1];
 

@@ -24,7 +24,7 @@ public class MultiplyAll implements Siso {
 	public String siso(String inString) {
 
 		// split on whitespace
-		String[] numbersAsStr = inString.split("\\s+");
+		String[] numbersAsStr = utils.splitOnWhitespace(inString);
 
 		// convert strings to integers
 		long[] numbers = new long[numbersAsStr.length];

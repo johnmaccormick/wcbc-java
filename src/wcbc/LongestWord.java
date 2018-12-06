@@ -19,7 +19,7 @@ public class LongestWord implements Siso {
 	 */
 	@Override
 	public String siso(String inString) {
-		String[] words = inString.split("\\s+");
+		String[] words = utils.splitOnWhitespace(inString);
 		String longest = "";
 		int lengthOfLongest = 0;
 		for (String word : words) {

@@ -79,7 +79,7 @@ public class Graph implements Iterable<String> {
 	 * @throws WcbcException
 	 */
 	private void readDescription(String graphString) throws WcbcException {
-		String[] split = graphString.split("\\s+");
+		String[] split = utils.splitOnWhitespace(graphString);
 		ArrayList<String> edgeDescriptions = new ArrayList<>();
 		for (String s : split) {
 			edgeDescriptions.add(s.trim());

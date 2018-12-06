@@ -447,12 +447,7 @@ class GraphTest {
 	}
 
 	private ArrayList<String> cliqueStrToList(String c) {
-		if (c.length() == 0) {
-			return new ArrayList<String>();
-		} else {
-			return new ArrayList<String>(Arrays.asList(c.split(",")));
-		}
-
+		return new ArrayList<String>(Arrays.asList(utils.splitCheckEmpty(c, ",")));
 	}
 
 	@Test

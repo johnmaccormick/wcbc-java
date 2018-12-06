@@ -73,12 +73,12 @@ class EdgeTest {
 	void testEdgeEquals() throws WcbcException {
 
 		ArrayList<PathEqualsVals> testVals = new ArrayList<>();
-		Edge e1 = new Edge("x,y".split(","));
-		Edge e2 = new Edge("x,y".split(","));
-		Edge e3 = new Edge("y,x".split(","));
-		Path p1 = new Path("x,y".split(","));
-		Path p2 = new Path("x,y".split(","));
-		Path p3 = new Path("x,y,z".split(","));
+		Edge e1 = new Edge("x", "y");
+		Edge e2 = new Edge("x", "y");
+		Edge e3 = new Edge("y", "x");
+		Path p1 = Path.fromString("x,y");
+		Path p2 = Path.fromString("x,y");
+		Path p3 = Path.fromString("x,y,z");
 		testVals.add(new PathEqualsVals(e1, e2, true));
 		testVals.add(new PathEqualsVals(e1, p1, true));
 		testVals.add(new PathEqualsVals(e2, p2, true));
