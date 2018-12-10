@@ -44,15 +44,6 @@ public class TspDir implements Siso {
 		}
 	}
 
-	class PathAndLen {
-		Path path;
-		int len;
-
-		public PathAndLen(Path path, int len) {
-			this.path = path;
-			this.len = len;
-		}
-	}
 
 	/**
 	 * Find the shortest Hamilton cycle in the given graph that extends the given
@@ -95,7 +86,7 @@ public class TspDir implements Siso {
 	 * 
 	 * @throws WcbcException
 	 */
-	private PathAndLen completeCycle(Graph graph, Path prefix, int prefixDistance) throws WcbcException {
+	static PathAndLen completeCycle(Graph graph, Path prefix, int prefixDistance) throws WcbcException {
 		String firstNode = prefix.start();
 		String lastNode = prefix.end();
 		Edge edgeCompletingCycle = new Edge(lastNode, firstNode);

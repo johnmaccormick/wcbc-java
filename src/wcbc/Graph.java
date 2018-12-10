@@ -1,7 +1,6 @@
 package wcbc;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -102,7 +101,14 @@ public class Graph implements Iterable<String> {
 					sourceStr = components[0];
 					destStr = components[1];
 					weightStr = components[2];
-					weight = Integer.parseInt(weightStr);
+					try {
+						weight = Integer.parseInt(weightStr);
+					} catch (NumberFormatException e) {
+						String msg = "couldn't convert '" + weightStr
+								+ "' to an integer weight when reading graph edge " + "with source " + sourceStr
+								+ " and destination " + destStr;
+						throw new WcbcException(msg);
+					}
 				} else { // unweighted
 					if (components.length != 2) {
 						throw new WcbcException("expected 2 components in edge description " + edgeDescription

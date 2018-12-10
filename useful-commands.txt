@@ -17,4 +17,24 @@ delete remote branch:
 
 git push --delete origin ch11
 
+show useful information about the remote:
+
+git remote show origin
+
+delete local reference to deleted remote branches:
+
+git remote prune origin
+
+See branches with tracking information:
+
+git branch -avv
+
+Make local branch track remote branch:
+
+git branch -u origin/ch14 ch14
+
+
+
+
+
 
