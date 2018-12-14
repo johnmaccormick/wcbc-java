@@ -22,7 +22,8 @@ public class TuringMachine {
 
 	public static boolean verbose = false;
 	public static final String blockMarker = "block:";
-	public static final int maxSteps = 100000;
+	// derived classes may override this
+	private static final int maxSteps = 100000;
 	public static final int maxDepth = 1000;
 	public static final String exceededMaxStepsMsg = "exceeded maxSteps";
 	public static final String rightDir = "R";
@@ -161,7 +162,7 @@ public class TuringMachine {
 	/**
 	 * Current state of the Turing machine.
 	 */
-	private String state = null;
+	protected String state = null;
 
 	public String getState() {
 		return state;
@@ -583,7 +584,7 @@ public class TuringMachine {
 	 * @param symbol
 	 *            a single character to be written onto the tape
 	 */
-	private void writeSymbol(char symbol) {
+	protected void writeSymbol(char symbol) {
 		this.tape.set(headPos, symbol);
 	}
 
@@ -746,9 +747,9 @@ public class TuringMachine {
 		return utils.joinChars(truncatedTape);
 	}
 
-	// Allow derived classes to override ...?? //todo
+	// Derived classes may override this
 	public int getMaxsteps() {
-		return maxSteps;
+		return TuringMachine.maxSteps;
 	}
 
 	/**
