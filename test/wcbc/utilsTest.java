@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -37,7 +38,7 @@ class utilsTest {
 
 	@Test
 	void ESSandDESS() throws IOException, WcbcException {
-		for(int i=0; i<100; i++) {
+		for (int i = 0; i < 100; i++) {
 			String inString1 = utils.randomLenAlphanumericString();
 			String inString2 = utils.randomLenAlphanumericString();
 			String combined = utils.ESS(inString1, inString2);
@@ -45,6 +46,25 @@ class utilsTest {
 			assertEquals(inString1, components[0]);
 			assertEquals(inString2, components[1]);
 		}
+	}
+
+	@Test
+	void testNextShortLex() {
+		List<Character> alphabet = utils.geneticAlphabetAsList();
+		String s = "";
+		for(int i=0; i<30; i++) {
+	        s = utils.nextShortLex(s, alphabet);
+		}
+		assertEquals("AGC", s);
+		assertEquals("AAA", utils.nextShortLex("TT", alphabet));
+		assertEquals("ACC", utils.nextShortLex("ACA", alphabet));
+	}
+
+	@Test
+	void testNextASCII() {
+		assertEquals("b", utils.nextASCII("a"));
+		assertEquals("abcdefh", utils.nextASCII("abcdefg"));
+		assertEquals("abcdefg34", utils.nextASCII("abcdefg33"));
 	}
 
 }

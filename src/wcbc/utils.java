@@ -502,6 +502,113 @@ public class utils {
 		return integerStreamFromString(s).sum();
 	}
 
+	public static List<Character> geneticAlphabetAsList() {
+		return new ArrayList<>(Arrays.asList('A', 'C', 'G', 'T'));
+	}
+
+	public static List<Character> asciiAlphabetAsList() {
+		List<Character> ascii = new ArrayList<>();
+		for (char i = 0; i < 128; i++) {
+			ascii.add(new Character(i));
+		}
+		return ascii;
+	}
+
+	// this will be initialized lazily.
+	public static List<Character> asciiAlphabet = null;
+
+	/**
+	 * Return the next string in shortlex ordering on a given alphabet.
+	 * 
+	 * Shortlex is an ordering that lists strings according to length, with strings
+	 * of the same length being ordered lexicographically. This function takes a
+	 * string on some particular alphabet as input, and returns the next string on
+	 * that alphabet in the shortlex ordering.
+	 * 
+	 * @param s
+	 *            The string whose successor will be returned.
+	 * @param alphabet
+	 *            A list of characters in the alphabet to be used.
+	 * @return The successor of s in the shortlex ordering, assuming the given
+	 *         alphabet.
+	 */
+	public static String nextShortLex(String s, List<Character> alphabet) {
+		int alphabetLen = alphabet.size();
+		Character first = alphabet.get(0);
+		Character last = alphabet.get(alphabetLen - 1);
+		if (s.equals("")) {
+			return first.toString();
+		}
+		List<Character> chars = new ArrayList<>();
+		for (int i = 0; i < s.length(); i++) {
+			chars.add(s.charAt(i));
+		}
+		int L = chars.size();
+
+		// The Boolean variable 'overflow' will indicate whether or not this
+		// is the last string of the current length (and hence whether we
+		// need to "overflow" to the first string with length one greater)
+		boolean overflow = true;
+		int i;
+		Character currentChar = null;
+		for (i = L - 1; i >= 0; i--) {
+			currentChar = chars.get(i);
+			if (!currentChar.equals(last)) {
+				overflow = false;
+				break;
+			}
+
+		}
+
+		// Either we overflowed (and i=0), or we didn't overflow, in which
+		// case the value of i is now the index of the rightmost character
+		// that can be incremented. Let's remember all the needed
+		// information about that character.
+		int incrementIndex = i;
+		int alphabetIndex = alphabet.indexOf(currentChar);
+
+		if (overflow) {
+			// Treat overflow as a special case and return a string of
+			// length L+1 consisting entirely of the first character in the
+			// alphabet.
+			List<Character> result = new ArrayList<>();
+			for (int j = 0; j < L + 1; j++) {
+				result.add(first);
+			}
+			return joinChars(result);
+		} else {
+			// We didn't overflow, so manipulate the array of characters to
+			// produce the next string in lexicographic order. The
+			// rightmost character that can be incremented gets
+			// incremented...
+			chars.set(incrementIndex, alphabet.get(alphabetIndex + 1));
+			// ...then all the characters to the right of that roll over to
+			// the first character in the alphabet.
+			for (int j = incrementIndex + 1; j < L; j++) {
+				chars.set(j, first);
+			}
+			return joinChars(chars);
+		}
+	}
+
+	/**
+	 * Return the successor of ASCII string s in the shortlex ordering.
+	 * 
+	 * For a detailed explanation, see the documentation of nextShortLex(). This
+	 * function is the same as nextShortLex(), for the special case where the
+	 * alphabet is the ASCII alphabet.
+	 * 
+	 * @param s
+	 *            The ASCII string whose successor will be returned.
+	 * @return The successor of ASCII string s in the shortlex ordering.
+	 */
+	public static String nextASCII(String s) {
+		if (asciiAlphabet == null) {
+			asciiAlphabet = asciiAlphabetAsList();
+		}
+		return nextShortLex(s, asciiAlphabet);
+	}
+
 	public static void main(String[] args) throws IOException, WcbcException, InterruptedException {
 		// String[] set1 = { "abc", "d", "ef" };
 		// String[] set2 = { "w", "xy", "z" };
@@ -540,14 +647,25 @@ public class utils {
 
 		// utils.loop();
 
-//		int[] iArr = intArrayFromString("4 5 asd 6");
-//		System.out.println(iArr.length);
+		// int[] iArr = intArrayFromString("4 5 asd 6");
+		// System.out.println(iArr.length);
 
 		// System.out.println(splitOnWhitespace("").length);
 
-		System.out.println("".split(",").length);
-		System.out.println(splitCheckEmpty("", ",") .length);
-		
+		// System.out.println("".split(",").length);
+		// System.out.println(splitCheckEmpty("", ",").length);
+
+		List<Character> alphabet = new ArrayList<>(Arrays.asList('a', 'b', 'c'));
+		// List<Character> alphabet = new ArrayList<>(Arrays.asList('0', '1'));
+		String s = "";
+		for (int i = 0; i < 20; i++) {
+			System.out.println(s);
+			s = nextShortLex(s, alphabet);
+		}
+
+		System.out.println(geneticAlphabetAsList());
+		System.out.println(asciiAlphabetAsList());
+
 	}
 
 }
