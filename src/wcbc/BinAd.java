@@ -1,7 +1,9 @@
 package wcbc;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -254,9 +256,10 @@ public class BinAd {
 	 *            would have been constructed using calls to
 	 *            applyAllRulesToFrontier().
 	 * @return a sequence of formulas that constitute a proof of f.
-	 * @throws WcbcException 
+	 * @throws WcbcException
 	 */
-	public static List<String> getProofFromPredecessors(String f, Map<String, String> predecessors) throws WcbcException {
+	public static List<String> getProofFromPredecessors(String f, Map<String, String> predecessors)
+			throws WcbcException {
 		List<String> proof = new ArrayList<>();
 		proof.add(f);
 
@@ -265,16 +268,219 @@ public class BinAd {
 		int count = 0;
 
 		while (!predecessor.equals("") && count <= maxPredecessors) {
-	        proof.add(predecessor);
-	        predecessor = predecessors.get(predecessor);
-	        count = count + 1;
+			proof.add(predecessor);
+			predecessor = predecessors.get(predecessor);
+			count = count + 1;
 		}
-	    if (count > maxPredecessors) {
-			throw new WcbcException("Warning: unexpected loop or long chain of predecessors");	    	
-	    }
+		if (count > maxPredecessors) {
+			throw new WcbcException("Warning: unexpected loop or long chain of predecessors");
+		}
 
-	    Collections.reverse(proof);
+		Collections.reverse(proof);
 		return proof;
+	}
+
+	/**
+	 * Generate at least K provable statements and return them as a set.
+	 * 
+	 * @param K
+	 *            a lower bound on the number of provable statements that will be
+	 *            generated.
+	 * @return a set of provable statements
+	 * @throws WcbcException
+	 */
+	public static Set<String> enumerateStatements(int K) throws WcbcException {
+		Set<String> proved = new HashSet<>(Arrays.asList(BinAd.theAxiom));
+		Set<String> frontier = proved;
+
+		while (proved.size() < K) {
+			frontier = applyAllRulesToFrontier(proved, frontier);
+		}
+		return proved;
+	}
+
+	/**
+	 * Wrapper of information about the result of an attempt to prove a given
+	 * formula f.
+	 */
+	public static class ProvableInfo {
+		/**
+		 * describes what happened when proof was attempted, e.g., "not well-formed..."
+		 * or "provable" or "not proved..."
+		 */
+		public String result;
+
+		/**
+		 * A proof of the formula f if one was found, otherwise no.
+		 */
+		public List<String> proof;
+
+		public ProvableInfo(String result, List<String> proof) {
+			this.result = result;
+			this.proof = proof;
+		}
+
+		@Override
+		public String toString() {
+			return "ProvableInfo [result=" + result + ", proof=" + proof + "]";
+		}
+	}
+
+	/**
+	 * Attempt to determine whether f is provable and return a proof if one is
+	 * found.
+	 * 
+	 * @param f
+	 *            string representing a formula in binAd
+	 * @param maxFormulas
+	 *            an (approximate) upper bound on the number of provable statements
+	 *            that will be generated while trying to prove f.
+	 * @return a ProvableInfo object, providing information about whether f is
+	 *         provable and if so a corresponding proof
+	 * @throws WcbcException
+	 */
+	public static ProvableInfo isProvable(String f, int maxFormulas) throws WcbcException {
+		List<String> proof = null;
+		String result;
+		if (!isWellFormed(f)) {
+			result = "not well-formed, therefore not provable";
+		} else {
+			Set<String> proved = new HashSet<>(Arrays.asList(BinAd.theAxiom));
+			Set<String> frontier = proved;
+			Map<String, String> predecessors = new HashMap<String, String>();
+			predecessors.put(BinAd.theAxiom, "");
+			while (proved.size() < maxFormulas) {
+				frontier = applyAllRulesToFrontier(proved, frontier, predecessors);
+				if (proved.contains(f)) {
+					break;
+				}
+			}
+			if (proved.contains(f)) {
+				result = "provable";
+				proof = getProofFromPredecessors(f, predecessors);
+			} else {
+				result = "not proved in first " + proved.size() + " formulas generated";
+			}
+		}
+
+		return new ProvableInfo(result, proof);
+	}
+
+	// see 2-param version of isProvable()
+	public static ProvableInfo isProvable(String f) throws WcbcException {
+		return isProvable(f, 100000);
+	}
+
+	/**
+	 * Compute a sum of binary numbers from a string expression
+	 * 
+	 * @param s
+	 *            string representing a sum of binary numbers, e.g. "101+1+10011"
+	 * @return the sum of the binary numbers in s
+	 */
+	public static int computeBinarySum(String s) {
+		String[] components = s.split("\\+");
+		int sum = 0;
+		for (String b : components) {
+			int val = Integer.parseInt(b, 2);
+			sum += val;
+		}
+		return sum;
+	}
+
+	/**
+	 * Return True if f is a true BinAd formula and False otherwise.
+	 * 
+	 * @param f
+	 *            string representing a formula in binAd
+	 * @return True if f is a true BinAd formula and False otherwise
+	 */
+	public static boolean isTrue(String f) {
+		if (!isWellFormed(f)) {
+			return false;
+		}
+		String[] components = f.split("=");
+		String lhs = components[0];
+		String rhs = components[1];
+		int leftSum = computeBinarySum(lhs);
+		int rightSum = computeBinarySum(rhs);
+		return (leftSum == rightSum);
+	}
+
+	/**
+	 * Determine whether a proof is a correct mechanical proof of a given target
+	 * statement.
+	 * 
+	 * Note that this function returns a string ("yes" or "no"), not a Boolean.
+	 * 
+	 * @param proof
+	 *            A string representing a proof in binAd. The statements in the
+	 *            proof are separated by whitespace.
+	 * @param target
+	 *            string representing a formula in binAd, purportedly the target of
+	 *            the proof. That is, we are trying to determine whether the given
+	 *            proof does indeed prove the target statement.
+	 * @return "yes" if the parameter proof is a mechanical proof of the target
+	 *         formula, and "no" otherwise
+	 * @throws WcbcException
+	 */
+	public static String isProof(String proof, String target) throws WcbcException {
+		// split proof into lines, stripping whitespace and removing empty lines
+		String[] splitProof = utils.splitOnWhitespace(proof);
+		List<String> proofLines = new ArrayList<>();
+		for (String p : splitProof) {
+			if (p.length() > 0) {
+				proofLines.add(p.trim());
+			}
+		}
+
+		// strip whitespace from target
+		target = target.trim();
+
+		// check that each line of the proof is well formed
+		for (String p : proofLines) {
+			if (!isWellFormed(p)) {
+				return "no";
+			}
+		}
+
+		// check that the last line of the proof is the same as the target
+		if (!proofLines.get(proofLines.size() - 1).equals(target)) {
+			return "no";
+		}
+
+		// check that each line of the proof follows from an earlier line
+		for (int i = 0; i < proofLines.size(); i++) {
+			String statement = proofLines.get(i);
+			boolean statementProved = false;
+
+			// Is the current statement an axiom?
+			if (statement.equals(theAxiom)) {
+				statementProved = true;
+			} else
+			// Otherwise, this statement must be proved from an earlier
+			// statement.
+			{
+				// Step backwards through the proof looking for an earlier
+				// statement that implies the current statement. The
+				// quadratic cost of this approach could be improved, but
+				// it's good enough for our purposes.
+				for (int j = i - 1; j >= 0; j--) {
+					String prevStatement = proofLines.get(j);
+					Set<String> results = applyAllRules(prevStatement);
+					if (results.contains(statement)) {
+						statementProved = true;
+						break;
+					}
+				}
+				if (!statementProved) {
+					return "no";
+				}
+			}
+		}
+
+		return "yes";
+
 	}
 
 	public static void main(String[] args) throws WcbcException {

@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -119,7 +120,7 @@ class BinAdTest {
 		expected2.put("1+1=10", "1+1=1+1");
 		expected2.put("10=1+1", "1+1=1+1");
 		expected2.put("1=1", "");
-		
+
 		Map<String, String> expected3 = new HashMap<String, String>();
 		expected3.put("1=1", "");
 		expected3.put("1+1+1=1+10", "1+1+1=1+1+1");
@@ -132,8 +133,9 @@ class BinAdTest {
 		expected3.put("1+1+1=1+1+1", "1+1=1+1");
 		expected3.put("1+1+1=10+1", "1+1+1=1+1+1");
 		expected3.put("10+1=1+1+1", "1+1+1=1+1+1");
-		
-		// only check predecessors. provedFormulas and frontierFormulas checked in previous test.
+
+		// only check predecessors. provedFormulas and frontierFormulas checked in
+		// previous test.
 		frontierFormulas = BinAd.applyAllRulesToFrontier(provedFormulas, frontierFormulas, predecessors);
 		assertEquals(expected1, predecessors);
 
@@ -144,6 +146,80 @@ class BinAdTest {
 		assertEquals(expected3, predecessors);
 	}
 
-	
-	
+	@Test
+	void testGetProofFromPredecessors() throws WcbcException {
+		Set<String> provedFormulas = new HashSet<>(Arrays.asList(BinAd.theAxiom));
+		Set<String> frontierFormulas = provedFormulas;
+		Map<String, String> predecessors = new HashMap<String, String>();
+		predecessors.put(BinAd.theAxiom, "");
+		frontierFormulas = BinAd.applyAllRulesToFrontier(provedFormulas, frontierFormulas, predecessors);
+		frontierFormulas = BinAd.applyAllRulesToFrontier(provedFormulas, frontierFormulas, predecessors);
+		frontierFormulas = BinAd.applyAllRulesToFrontier(provedFormulas, frontierFormulas, predecessors);
+
+		List<String> proof = BinAd.getProofFromPredecessors("1+1+1=10+1", predecessors);
+		assertEquals("[1=1, 1+1=1+1, 1+1+1=1+1+1, 1+1+1=10+1]", proof.toString());
+	}
+
+	@Test
+	void testEnumerateStatements() throws WcbcException {
+		Set<String> solution = new HashSet<String>(Arrays.asList("1+1+1=1+10", "10+1=1+1+1", "10=10", "1+1=10",
+				"10=1+1", "1+1+1+1=1+1+1+1", "1=1", "1+1=1+1", "1+1+1=10+1", "1+1+1=1+1+1", "1+10=1+1+1"));
+		Set<String> val = BinAd.enumerateStatements(10);
+		assertEquals(solution, val);
+	}
+
+	@Test
+	void testIsProvable() throws WcbcException {
+		assertTrue(BinAd.isProvable("1", 1000).result.startsWith("not"));
+		assertTrue(BinAd.isProvable("1=1").result.startsWith("provable"));
+		assertTrue(BinAd.isProvable("10=10").result.startsWith("provable"));
+		assertTrue(BinAd.isProvable("1+1=10").result.startsWith("provable"));
+		assertTrue(BinAd.isProvable("1+1+1=1+1+1+1", 1000).result.startsWith("not"));
+		// take a while
+		// assertTrue(BinAd.isProvable("1+1=1+1+1").result.startsWith("not"));
+		// assertTrue(BinAd.isProvable("1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1=11000").result.startsWith("not"));
+	}
+
+	@Test
+	void testComputeBinarySum() throws WcbcException {
+		assertEquals(1, BinAd.computeBinarySum("1"));
+		assertEquals(0, BinAd.computeBinarySum("0"));
+		assertEquals(2, BinAd.computeBinarySum("10"));
+		assertEquals(1, BinAd.computeBinarySum("01"));
+		assertEquals(2, BinAd.computeBinarySum("1+1"));
+		assertEquals(25, BinAd.computeBinarySum("101+1+10011"));
+		assertEquals(57, BinAd.computeBinarySum("1+11+111+1111+11111"));
+	}
+
+	@Test
+	void testIsTrue() throws WcbcException {
+		assertEquals(false, BinAd.isTrue(""));
+		assertEquals(false, BinAd.isTrue("123=321"));
+		assertEquals(false, BinAd.isTrue("1"));
+		assertEquals(true, BinAd.isTrue("1=1"));
+		assertEquals(true, BinAd.isTrue("10=10"));
+		assertEquals(true, BinAd.isTrue("1+1=10"));
+		assertEquals(true, BinAd.isTrue("1+10+10+1=110"));
+		assertEquals(false, BinAd.isTrue("1+1+1=1+1+1+1"));
+		assertEquals(true, BinAd.isTrue("1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1=11000"));
+	}
+
+	@Test
+	void testIsProof() throws WcbcException {
+
+		String goodProof1 = "1=1\n1+1=1+1\n1+1+1=1+1+1\n1+1+1=1+10\n1+1+1=11\n10+1=11";
+		String goodProof2 = "1=1\n1+1=1+1\n1=1\n1+1+1=1+1+1\n1+1+1=1+10\n1+1+1=11\n1+1+1+1=1+1+1+1\n1+10=1+10\n10+1=11";
+		String badProof1 = "1=1\n1+1=1+1\n1+1+1=1+1+1\n1+1+1=11\n10+1=11";
+		String badProof2 = "asdfsa\ndfd\n10+1=11";
+		String badProof3 = "1=1\n1+1=1+1\n1+1+1=1+1+1\n1+1+1=1+10\n1+1+1=11";
+
+		String target = "10+1=11";
+
+		assertEquals("yes", BinAd.isProof(goodProof1, target));
+		assertEquals("yes", BinAd.isProof(goodProof2, target));
+		assertEquals("no", BinAd.isProof(badProof1, target));
+		assertEquals("no", BinAd.isProof(badProof2, target));
+		assertEquals("no", BinAd.isProof(badProof3, target));
+	}
+
 }
