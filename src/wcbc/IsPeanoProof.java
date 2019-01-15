@@ -25,7 +25,7 @@ import java.io.IOException;
 public class IsPeanoProof implements Siso2 {
 
 	@Override
-	public String siso(String proofString, String inString) throws WcbcException, IOException {
+	public String siso(String proofString, String inString) {
 		// To permit testing of certain other functions, we return a
 		// correct value for proving "0=0". This is not actually an axiom
 		// in the usual formulations of Peano arithmetic, but for testing
