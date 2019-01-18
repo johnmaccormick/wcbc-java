@@ -419,18 +419,6 @@ public class Sat implements Siso {
 	}
 
 	public static void main(String[] args) throws WcbcException, IOException {
-		System.out.println(trimParentheses(""));
-		System.out.println(trimParentheses("("));
-		System.out.println(trimParentheses(")"));
-		System.out.println(trimParentheses("))()("));
-		System.out.println(trimParentheses("a"));
-		System.out.println(trimParentheses("(a"));
-		System.out.println(trimParentheses("a)"));
-		System.out.println(trimParentheses("(a)"));
-		System.out.println(trimParentheses("asdf"));
-		System.out.println(trimParentheses("(())asdf()("));
-		System.out.println(trimParentheses("(asdf"));
-		System.out.println(trimParentheses("asdf)"));
-		System.out.println(trimParentheses("(asdf)"));
+
 	}
 }
