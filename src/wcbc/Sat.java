@@ -29,9 +29,9 @@ import java.util.Set;
  * 
  * Example:
  * 
- * > java wcbc/Sat("x1 OR x3 AND NOT x1 OR NOT x2 OR NOT x3")
+ * > java wcbc/Sat "x1 OR x3 AND NOT x1 OR NOT x2 OR NOT x3"
  * 
- * "x3,x1"
+ * "x3,x1" [or another satisfying assignment]
  * 
  * 
  */
@@ -328,7 +328,7 @@ public class Sat implements Siso {
 	 *            a CNF formula in the ASCII format described in the textbook
 	 * @return the CNF formula as a Java object
 	 */
-	static CNFformula readSat(String inString) {
+	public static CNFformula readSat(String inString) {
 		String[] clauseStrings = inString.split("AND");
 		// remove whitespace from clauses
 		utils.trimAll(clauseStrings);
@@ -419,6 +419,10 @@ public class Sat implements Siso {
 	}
 
 	public static void main(String[] args) throws WcbcException, IOException {
-
+		utils.checkSisoArgs(args);
+		String inString = args[0];
+		Sat sat = new Sat();
+		String result = sat.siso(inString);
+		System.out.println(result);
 	}
 }
