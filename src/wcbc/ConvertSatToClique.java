@@ -25,7 +25,6 @@ public class ConvertSatToClique implements Siso {
 	@Override
 	public String siso(String inString) throws WcbcException, IOException {
 		Sat.CNFformula cnfFormula = Sat.readSat(inString);
-		System.out.println("cnfFormula: " + cnfFormula);
 		int numClauses = cnfFormula.size();
 		Graph graph = new Graph("", false, false);
 		for (int clauseID = 0; clauseID < numClauses; clauseID++) {
@@ -52,8 +51,6 @@ public class ConvertSatToClique implements Siso {
 			String literalName1 = node1.substring(0, splitIndex);
 			String clauseID1 = node1.substring(splitIndex + 1);
 			for (String node2 : graph) {
-				System.out.println("graph: " + graph);
-				System.out.println("considering adding edge between " + node1 + ", " + node2);
 				splitIndex = node2.lastIndexOf('C');
 				String literalName2 = node2.substring(0, splitIndex);
 				String clauseID2 = node2.substring(splitIndex + 1);
