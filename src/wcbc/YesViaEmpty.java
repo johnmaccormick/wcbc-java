@@ -19,12 +19,22 @@ public class YesViaEmpty implements Siso2 {
 
 	@Override
 	public String siso(String progString, String inString) throws WcbcException, IOException {
-		utils.writeFile(utils.prependWcbcPath("progString.txt"), progString);
-		utils.writeFile(utils.prependWcbcPath("inString.txt"), inString);
+		utils.writeFile("progString.txt", progString);
+		utils.writeFile("inString.txt", inString);
 		YesOnEmpty yesOnEmpty = new YesOnEmpty();
-		String ignoreInput = utils.readFile(utils.prependWcbcPath("ignoreInput.java"));
+		String ignoreInput = utils.readFile("ignoreInput.java");
 		String val = yesOnEmpty.siso(ignoreInput);
 		return val;
 	}
+
+    public static void main(String[] args) throws WcbcException, IOException {
+		utils.checkSiso2Args(args);
+		String progString = args[0];
+		String inString = args[1];
+		YesViaEmpty yesViaEmpty = new YesViaEmpty();
+		String result = yesViaEmpty.siso(progString, inString);
+		System.out.println(result);
+	}
+
 
 }

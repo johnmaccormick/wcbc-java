@@ -7,9 +7,6 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import wcbc.EdgeTest.EdgeVals;
-import wcbc.PathTest.PathEqualsVals;
-
 class EdgeTest {
 
 	@BeforeEach

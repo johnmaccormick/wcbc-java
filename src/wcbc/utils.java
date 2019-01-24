@@ -3,6 +3,7 @@ package wcbc;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,15 +26,49 @@ public class utils {
 	public static Random aRandom = new Random();
 
 	/**
+	 * Returned the path to a given filename by searching in some standard WCBC
+	 * directories.
+	 * 
+	 * Specifically, we search first in the current directory ".", then in "./wcbc",
+	 * then in "./src/wcbc". This is useful when running SISO java programs from the
+	 * command line and/or within an environment such as Eclipse.
+	 * 
+	 * @param fileName
+	 *            The name of the file to search for
+	 * @return path to the file, or null if it wasn't found
+	 */
+	public static Path findWcbcFile(String fileName) {
+		Path path1 = Paths.get(fileName);
+		Path path2 = Paths.get("wcbc", fileName);
+		Path path3 = Paths.get("src", "wcbc", fileName);
+		Path[] paths = { path1, path2, path3 };
+
+		for (Path path : paths) {
+			if (Files.isReadable(path)) {
+				return path;
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * Read a file, returning its contents as a single string.
+	 * 
+	 * For convenience, we actually look for the file in three typical WCBC
+	 * directories. See the documentation for findWcbcFile().
 	 * 
 	 * @param fileName
 	 *            The name of the file to be read.
 	 * @return The contents of the file.
 	 * @throws IOException
+	 * @throws WcbcException
 	 */
-	public static String readFile(String fileName) throws IOException {
-		byte[] bytes = Files.readAllBytes(Paths.get(fileName));
+	public static String readFile(String fileName) throws IOException, WcbcException {
+		Path path = findWcbcFile(fileName);
+		if (path == null) {
+			throw new WcbcException("Couldn't find file " + fileName);
+		}
+		byte[] bytes = Files.readAllBytes(path);
 		return new String(bytes);
 	}
 
@@ -45,8 +80,9 @@ public class utils {
 	 *            The name of the file to be read.
 	 * @return The contents of the file.
 	 * @throws IOException
+	 * @throws WcbcException 
 	 */
-	public static String rf(String fileName) throws IOException {
+	public static String rf(String fileName) throws IOException, WcbcException {
 		return utils.readFile(fileName);
 	}
 
@@ -139,7 +175,9 @@ public class utils {
 	 * @return The resulting path
 	 */
 	public static String prependWcbcPath(String fileName) {
-		String fullName = Paths.get("src", "wcbc", fileName).toString();
+		// String fullName = Paths.get("src", "wcbc", fileName).toString();
+		// String fullName = Paths.get("wcbc", fileName).toString();
+		String fullName = fileName;
 		return fullName;
 	}
 
@@ -625,8 +663,6 @@ public class utils {
 		// System.out.println(d);
 		// System.out.println(e);
 
-		// String progString =
-		// utils.readFile(utils.prependWcbcPath("containsGAGA.java"));
 		// // String progString = "asdf\npublic class foo";
 		// String val = utils.extractClassName(progString);
 		// System.out.println(val);

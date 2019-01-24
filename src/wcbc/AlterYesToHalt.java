@@ -32,4 +32,13 @@ public class AlterYesToHalt implements Siso {
 		}
 	}
 
+    public static void main(String[] args) throws WcbcException, IOException {
+		utils.checkSisoArgs(args);
+		String inString = args[0];
+		AlterYesToHalt alterYesToHalt = new AlterYesToHalt();
+		String result = alterYesToHalt.siso(inString);
+		System.out.println(result);
+	}
+
+    
 }

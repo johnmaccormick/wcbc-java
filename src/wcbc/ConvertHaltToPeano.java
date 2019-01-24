@@ -17,4 +17,13 @@ public class ConvertHaltToPeano implements Siso {
 		return "not implemented";
 	}
 
+    public static void main(String[] args) {
+		utils.checkSisoArgs(args);
+		String inString = args[0];
+		ConvertHaltToPeano convertHaltToPeano = new ConvertHaltToPeano();
+		String result = convertHaltToPeano.siso(inString);
+		System.out.println(result);
+	}
+
+
 }

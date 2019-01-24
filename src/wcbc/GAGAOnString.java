@@ -28,4 +28,14 @@ public class GAGAOnString implements Siso2 {
 		}
 	}
 
+    public static void main(String[] args) throws WcbcException, IOException {
+		utils.checkSiso2Args(args);
+		String progString = args[0];
+		String inString = args[1];
+		GAGAOnString gAGAOnString = new GAGAOnString();
+		String result = gAGAOnString.siso(progString, inString);
+		System.out.println(result);
+	}
+
+
 }

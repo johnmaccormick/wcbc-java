@@ -43,7 +43,7 @@ public class YesOnString implements Siso2 {
 		String progString = "";
 		String inString = "";
 		if (args[0].equals("-f")) {
-			progString = utils.readFile(utils.prependWcbcPath(args[1]));
+			progString = utils.readFile(args[1]);
 			inString = args[2];
 		} else {
 			progString = args[0];

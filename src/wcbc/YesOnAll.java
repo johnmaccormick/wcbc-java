@@ -29,4 +29,13 @@ public class YesOnAll implements Siso {
 		return "yes";
 	}
 
+    public static void main(String[] args) throws WcbcException, IOException {
+		utils.checkSisoArgs(args);
+		String inString = args[0];
+		YesOnAll yesOnAll = new YesOnAll();
+		String result = yesOnAll.siso(inString);
+		System.out.println(result);
+	}
+
+
 }

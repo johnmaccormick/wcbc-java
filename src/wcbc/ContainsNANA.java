@@ -27,4 +27,15 @@ public class ContainsNANA implements Siso {
 		return "no";
 	}
 
+
+    public static void main(String[] args) throws WcbcException, IOException {
+		utils.checkSisoArgs(args);
+		String inString = args[0];
+		ContainsNANA containsNANA = new ContainsNANA();
+		String result = containsNANA.siso(inString);
+		System.out.println(result);
+	}
+
+
+    
 }

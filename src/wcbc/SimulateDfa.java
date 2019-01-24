@@ -35,7 +35,7 @@ public class SimulateDfa implements Siso2 {
 		String dfaString = "";
 		String tapeStr = "";
 		if (args[0].equals("-f")) {
-			dfaString = utils.readFile(utils.prependWcbcPath(args[1]));
+			dfaString = utils.readFile(args[1]);
 			tapeStr = args[2];
 		} else {
 			dfaString = args[0];

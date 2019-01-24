@@ -2,7 +2,6 @@ package wcbc;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -36,7 +35,6 @@ public class Packing implements Siso {
 		String[] components = inString.split(";");
 		utils.trimAll(components);
 		String weightString = components[0];
-		int[] weights = utils.intArrayFromString(weightString);
 		String LStr = components[1];
 		int L = Integer.parseInt(LStr);
 		String HStr = components[2];

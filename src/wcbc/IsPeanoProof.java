@@ -1,7 +1,5 @@
 package wcbc;
 
-import java.io.IOException;
-
 /**
  * SISO program IsPeanoProof.java
  * 
@@ -38,5 +36,15 @@ public class IsPeanoProof implements Siso2 {
 			return "no";
 		}
 	}
+
+    public static void main(String[] args) {
+		utils.checkSiso2Args(args);
+		String proofString = args[0];
+		String inString = args[1];
+		IsPeanoProof isPeanoProof = new IsPeanoProof();
+		String result = isPeanoProof.siso(proofString, inString);
+		System.out.println(result);
+	}
+
 
 }

@@ -2,8 +2,6 @@ package wcbc;
 
 import java.io.IOException;
 
-import wcbc.TuringMachine.Direction;
-
 /**
  * A Dfa object models a dfa as described in the textbook.
  */
@@ -107,7 +105,7 @@ public class Dfa extends TuringMachine {
 	
 	
 	public static void main(String[] args) throws IOException, WcbcException {
-		String description = utils.rf(utils.prependWcbcPath("containsGAGA.dfa"));
+		String description = utils.rf("containsGAGA.dfa");
 		String tapeStr = "AAAAAAGAGATTT";
 		Dfa dfa = new Dfa(description, tapeStr);
 		String result = dfa.run();

@@ -21,7 +21,7 @@ public class YesViaNumChars implements Siso2 {
 	public String siso(String progString, String inString) throws WcbcException, IOException {
 		String singleString = utils.ESS(progString, inString);
 		NumCharsOnString numCharsOnString = new NumCharsOnString();
-		String alterProg = utils.readFile(utils.prependWcbcPath("AlterYesToNumChars.java"));
+		String alterProg = utils.readFile("AlterYesToNumChars.java");
 		String val = numCharsOnString.siso(alterProg, singleString);
 		if (val.equals("3")) {
 			return "yes";
@@ -29,5 +29,15 @@ public class YesViaNumChars implements Siso2 {
 			return "no";
 		}
 	}
+
+    public static void main(String[] args) throws WcbcException, IOException {
+		utils.checkSiso2Args(args);
+		String progString = args[0];
+		String inString = args[1];
+		YesViaNumChars yesViaNumChars = new YesViaNumChars();
+		String result = yesViaNumChars.siso(progString, inString);
+		System.out.println(result);
+	}
+
 
 }

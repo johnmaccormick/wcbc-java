@@ -13,6 +13,7 @@ package wcbc;
  */
 public class WcbcException extends Exception {
 
+
 	public WcbcException() {
 		super();
 	}
@@ -32,5 +33,8 @@ public class WcbcException extends Exception {
 	public WcbcException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 	}
+
+	// The compiler seems to want this. 
+	private static final long serialVersionUID = -5912224443487420819L;
 
 }

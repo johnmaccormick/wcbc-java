@@ -31,4 +31,13 @@ public class YesOnEmpty implements Siso {
 		}
 	}
 
+    public static void main(String[] args) throws WcbcException, IOException {
+		utils.checkSisoArgs(args);
+		String inString = args[0];
+		YesOnEmpty yesOnEmpty = new YesOnEmpty();
+		String result = yesOnEmpty.siso(inString);
+		System.out.println(result);
+	}
+
+
 }

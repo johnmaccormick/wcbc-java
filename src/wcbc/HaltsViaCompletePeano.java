@@ -41,4 +41,13 @@ public class HaltsViaCompletePeano implements Siso {
 		}
 	}
 
+    public static void main(String[] args) {
+		utils.checkSisoArgs(args);
+		String inString = args[0];
+		HaltsViaCompletePeano haltsViaCompletePeano = new HaltsViaCompletePeano();
+		String result = haltsViaCompletePeano.siso(inString);
+		System.out.println(result);
+	}
+
+
 }

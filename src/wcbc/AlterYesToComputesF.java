@@ -17,8 +17,8 @@ public class AlterYesToComputesF implements Siso {
 
 	@Override
 	public String siso(String inString) throws WcbcException, IOException {
-		String progString = utils.readFile(utils.prependWcbcPath("progString.txt"));
-		String newInString = utils.readFile(utils.prependWcbcPath("inString.txt"));
+		String progString = utils.readFile("progString.txt");
+		String newInString = utils.readFile("inString.txt");
 		Universal universal = new Universal();
 		String val = universal.siso(progString, newInString);
 		F f = new F();
@@ -29,4 +29,13 @@ public class AlterYesToComputesF implements Siso {
 			return g.siso(inString);
 		}
 	}
+
+    public static void main(String[] args) throws WcbcException, IOException {
+		utils.checkSisoArgs(args);
+		String inString = args[0];
+		AlterYesToComputesF alterYesToComputesF = new AlterYesToComputesF();
+		String result = alterYesToComputesF.siso(inString);
+		System.out.println(result);
+	}
+
 }

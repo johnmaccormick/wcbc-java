@@ -19,18 +19,18 @@ public class IgnoreInput implements Siso {
 
 	@Override
 	public String siso(String inString) throws WcbcException, IOException {
-		String progString = utils.readFile(utils.prependWcbcPath("progString.txt"));
-		String newInString = utils.readFile(utils.prependWcbcPath("inString.txt"));
+		String progString = utils.readFile("progString.txt");
+		String newInString = utils.readFile("inString.txt");
 		Universal universal = new Universal();
 		String result = universal.siso(progString, newInString);
 		return result;
 	}
 
 	public static void main(String[] args) throws IOException, WcbcException {
-		String progString = utils.readFile(utils.prependWcbcPath("containsGAGA.java"));
-		utils.writeFile(utils.prependWcbcPath("progString.txt"), progString);
+		String progString = utils.readFile("containsGAGA.java");
+		utils.writeFile("progString.txt", progString);
 		String inString = "CCCCCCCCCCAAGAGATT";
-		utils.writeFile(utils.prependWcbcPath("inString.txt"), inString);
+		utils.writeFile("inString.txt", inString);
 
 		IgnoreInput ignoreInput = new IgnoreInput();
 		String result = ignoreInput.siso("asdf");

@@ -80,4 +80,13 @@ public class NdContainsNANA implements Siso {
 		}
 	}
 
+    public static void main(String[] args) throws WcbcException, IOException {
+		utils.checkSisoArgs(args);
+		String inString = args[0];
+		NdContainsNANA ndContainsNANA = new NdContainsNANA();
+		String result = ndContainsNANA.siso(inString);
+		System.out.println(result);
+	}
+
+
 }

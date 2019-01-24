@@ -1,34 +1,32 @@
-README.txt for WCBC materials version 1.0 (March 2018)
-------------------------------------------------------
+README.txt for WCBC Java materials version 1.0 (January 2019)
+-------------------------------------------------------------
 
 1. Overview
 
-WCBC is an abbreviation for the book "What Can Be Computed?: A Practical Guide to the Theory of Computation," written by John MacCormick and published by Princeton University Press (2018). Please see http://whatcanbecomputed.com for more details about the book. This directory contains supporting materials for WCBC. 
+WCBC is an abbreviation for the book "What Can Be Computed?: A Practical Guide to the Theory of Computation," written by John MacCormick and published by Princeton University Press (2018). Please see http://whatcanbecomputed.com for more details about the book. This directory contains supporting materials for WCBC. More specifically, this directory contains *Java* materials. The book uses Python for examples and explanations, but all functionality is also available in Java. This directory provides those Java materials.
 
 2. File types in this directory
 
-The majority of the materials are Python programs (.py files), but there are several other file types, as summarized in the following table:
+Essentially all files of interest are in the "src" subdirectory. 
 
-.cfg description of a context free grammar
-.dfa description of a deterministic finite automaton
-.nfa description of a nondeterministic finite automaton
-.pda description of a push down automaton
-.py  Python program or file (SISO or non-SISO -- see below)
-.tm  description of a Turing machine
-.txt ASCII text 
+The majority of the materials are Java classes (.java files), but there are several other file types, as summarized in the following table:
+
+.cfg  description of a context free grammar
+.dfa  description of a deterministic finite automaton
+.nfa  description of a nondeterministic finite automaton
+.pda  description of a push down automaton
+.java Java class (SISO or non-SISO -- see below)
+.tm   description of a Turing machine
+.txt  ASCII text 
 
 All the above file types are described in the WCBC book.
 
-3. SISO and non-SISO Python files
+3. SISO and non-SISO Java classes
 
-WCBC defines a special kind of Python program referred to as "string in string out", or SISO for short. Please see the book for formal definitions and details, but the basic idea is that a SISO Python program defines at least one function. The first function appearing in the file is referred to as the "main" function, and this main function is required to receive only string parameters (usually exactly one string parameter) and it must also return a string. SISO programs are written with the goal of being as simple and clear as possible to readers of the book. Therefore, they are not object oriented, they do not usually attempt to use standard Python idioms, and they typically do not prioritize efficient or effective code.
+WCBC defines a special kind of Python program referred to as "string in string out", or SISO for short. Here we are instead providing Java materials, and the analogous concept is a SISO Java class, which implements the "siso" interface. See Siso.java for details.
 
-In these materials, most but not all of the provided Python files are SISO Python programs; SISO programs are identified by a comment in the first line. There are also several non-SISO Python files. These include Python classes (e.g. graph.py, turingMachine.py) and the library of utility functions, utils.py.
+In these materials, most but not all of the provided Java files are SISO classes; SISO classes are identified by a comment in the first line. There are also several non-SISO classes. These include  Graph.java, TuringMachine.java, and the library of utility functions, utils.java.
 
-4. Conventions for documenting Python files
+4. Tests
 
-SISO programs and non-SISO programs are documented via differing conventions. SISO programs are documented using #-style comments before the start of the main function. This is done to facilitate the incorporation of the function itself in the book: if standard Python docstrings were used instead, it would be more difficult to display SISO functions in the book. Non-SISO Python files are documented using standard Python docstrings.
-
-5. Tests
-
-In the vast majority of Python files, code for performing unit tests is placed in the same file as the code itself. Any function whose name begins with "test" is a test function. The test code is also useful for providing examples of how to invoke the other functions in the file.
+Standard JUnit tests are provided in the test directory.

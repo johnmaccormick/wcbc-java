@@ -3,8 +3,6 @@ package wcbc;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import wcbc.NdFindNANA.FindString;
-
 /**
  * SISO program NdFactor.java
  * 

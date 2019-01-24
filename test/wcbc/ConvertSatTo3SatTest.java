@@ -3,8 +3,6 @@ package wcbc;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -26,6 +24,7 @@ class ConvertSatTo3SatTest {
 			String varName = "d" + Integer.toString(i + 1);
 			assertTrue(allVariables.contains(varName));
 			assertEquals(numVars + i + 1, allVariables.size());
+			assertEquals(varName, dummyName);
 		}
 	}
 

@@ -484,7 +484,7 @@ public class BinAd {
 	}
 
 	public static void main(String[] args) throws WcbcException {
-		HashSet<String> s = BinAd.applyRuleThree("1+10=11");
+//		HashSet<String> s = BinAd.applyRuleThree("1+10=11");
 
 	}
 

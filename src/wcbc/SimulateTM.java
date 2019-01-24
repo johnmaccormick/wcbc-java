@@ -37,7 +37,7 @@ public class SimulateTM implements Siso2 {
 		String tmString = "";
 		String tapeStr = "";
 		if (args[0].equals("-f")) {
-			tmString = utils.readFile(utils.prependWcbcPath(args[1]));
+			tmString = utils.readFile(args[1]);
 			tapeStr = args[2];
 		} else {
 			tmString = args[0];

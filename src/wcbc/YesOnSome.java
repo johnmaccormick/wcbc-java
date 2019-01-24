@@ -37,5 +37,15 @@ public class YesOnSome implements Siso {
 		}
 		// nothing returned "yes", so guess that it never returns "yes"
 		return "no";
+    }
+    
+    public static void main(String[] args) throws WcbcException, IOException {
+		utils.checkSisoArgs(args);
+		String inString = args[0];
+		YesOnSome yesOnSome = new YesOnSome();
+		String result = yesOnSome.siso(inString);
+		System.out.println(result);
+	
+
 	}
 }

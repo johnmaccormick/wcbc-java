@@ -20,9 +20,9 @@ public class YesViaComputesF implements Siso2 {
 	@Override
 	public String siso(String progString, String inString) throws WcbcException, IOException {
 		ComputesF computesF = new ComputesF();
-		utils.writeFile(utils.prependWcbcPath("progString.txt"), progString);
-		utils.writeFile(utils.prependWcbcPath("inString.txt"), inString);
-		String alterProgString = utils.readFile(utils.prependWcbcPath("AlterYesToComputesF.java"));
+		utils.writeFile("progString.txt", progString);
+		utils.writeFile("inString.txt", inString);
+		String alterProgString = utils.readFile("AlterYesToComputesF.java");
 		String val = computesF.siso(alterProgString);
 		if (val.equals("yes")) {
 			return "yes";
@@ -30,5 +30,15 @@ public class YesViaComputesF implements Siso2 {
 			return "no";
 		}
 	}
+
+    public static void main(String[] args) throws WcbcException, IOException {
+		utils.checkSiso2Args(args);
+		String progString = args[0];
+		String inString = args[1];
+		YesViaComputesF yesViaComputesF = new YesViaComputesF();
+		String result = yesViaComputesF.siso(progString, inString);
+		System.out.println(result);
+	}
+
 
 }

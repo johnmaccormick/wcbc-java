@@ -24,5 +24,15 @@ public class ProvableInPeano implements Siso {
 			}
 			proofString = utils.nextASCII(proofString);
 		}
+    }
+    
+    public static void main(String[] args) throws WcbcException, IOException {
+		utils.checkSisoArgs(args);
+		String inString = args[0];
+		ProvableInPeano provableInPeano = new ProvableInPeano();
+		String result = provableInPeano.siso(inString);
+		System.out.println(result);
 	}
+
+	
 }

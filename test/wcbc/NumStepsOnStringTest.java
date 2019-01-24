@@ -18,7 +18,7 @@ class NumStepsOnStringTest {
 		for (String[] v : testVals) {
 			String progString = utils.readFile(utils.prependWcbcPath(v[0]));
 			String inString = v[1];
-			String solution = v[2];
+//			String solution = v[2]; // not used
 			String val = numStepsOnString.siso(progString, inString);
 			assertTrue(!val.isEmpty()); // weak test ... too bad
 		}

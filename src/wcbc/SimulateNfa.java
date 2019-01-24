@@ -35,7 +35,7 @@ public class SimulateNfa implements Siso2 {
 		String nfaString = "";
 		String tapeStr = "";
 		if (args[0].equals("-f")) {
-			nfaString = utils.readFile(utils.prependWcbcPath(args[1]));
+			nfaString = utils.readFile(args[1]);
 			tapeStr = args[2];
 		} else {
 			nfaString = args[0];

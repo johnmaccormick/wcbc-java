@@ -33,4 +33,13 @@ public class ComputesF implements Siso {
 		return "yes";
 	}
 
+    public static void main(String[] args) throws WcbcException, IOException {
+		utils.checkSisoArgs(args);
+		String inString = args[0];
+		ComputesF computesF = new ComputesF();
+		String result = computesF.siso(inString);
+		System.out.println(result);
+	}
+
+
 }

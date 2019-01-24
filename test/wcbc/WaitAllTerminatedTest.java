@@ -6,8 +6,6 @@ import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
-import wcbc.NonDetSolutionTest.NdSolnThread;
-
 class WaitAllTerminatedTest {
 
 	class FindNum implements Runnable {

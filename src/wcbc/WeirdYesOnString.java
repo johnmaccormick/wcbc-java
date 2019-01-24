@@ -41,7 +41,7 @@ public class WeirdYesOnString implements Siso {
 		utils.checkSisoArgs(args);
 		String inString = "";
 		if (args[0].equals("-f")) {
-			inString = utils.readFile(utils.prependWcbcPath(args[1]));
+			inString = utils.readFile(args[1]);
 		} else {
 			inString = args[0];
 		}

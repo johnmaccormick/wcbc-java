@@ -19,7 +19,7 @@ public class Godel implements Siso {
 		ConvertHaltToPeano convertHaltToPeano = new ConvertHaltToPeano();
 		ProvableInPeano provableInPeano = new ProvableInPeano();
 
-		String godelProg = utils.rf(utils.prependWcbcPath("Godel.java"));
+		String godelProg = utils.rf("Godel.java");
 		String haltInPeano = convertHaltToPeano.siso(godelProg);
 		String notHaltInPeano = "NOT " + haltInPeano;
 

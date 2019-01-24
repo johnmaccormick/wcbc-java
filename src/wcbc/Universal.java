@@ -104,7 +104,7 @@ public class Universal implements Siso2 {
 	// where this method is invoked, for a more detailed explanation.
 	private void checkMirrorsExistingClass(String className, String progString) throws WcbcException {
 		String fileName = className + ".java";
-		String fullName = utils.prependWcbcPath(fileName);
+		String fullName = fileName;
 		String fileContents;
 		try {
 			fileContents = utils.readFile(fullName);
@@ -125,7 +125,7 @@ public class Universal implements Siso2 {
 		String progString = "";
 		String inString = "";
 		if (args[0].equals("-f")) {
-			progString = utils.readFile(utils.prependWcbcPath(args[1]));
+			progString = utils.readFile(args[1]);
 			inString = args[2];
 		} else {
 			progString = args[0];

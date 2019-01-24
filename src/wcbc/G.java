@@ -20,4 +20,13 @@ public class G implements Siso {
 		}
 	}
 
+    public static void main(String[] args) throws WcbcException, IOException {
+		utils.checkSisoArgs(args);
+		String inString = args[0];
+		G g = new G();
+		String result = g.siso(inString);
+		System.out.println(result);
+	}
+
+
 }

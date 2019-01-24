@@ -31,4 +31,13 @@ public class HaltsViaPeano implements Siso {
 		return trueInPeano.siso(haltInPA);
 	}
 
+    public static void main(String[] args) throws WcbcException, IOException {
+		utils.checkSisoArgs(args);
+		String inString = args[0];
+		HaltsViaPeano haltsViaPeano = new HaltsViaPeano();
+		String result = haltsViaPeano.siso(inString);
+		System.out.println(result);
+	}
+
+
 }

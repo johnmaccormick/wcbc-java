@@ -21,4 +21,13 @@ public class P3 implements Siso {
 		}
 	}
 
+    public static void main(String[] args) throws WcbcException, IOException {
+		utils.checkSisoArgs(args);
+		String inString = args[0];
+		P3 p3 = new P3();
+		String result = p3.siso(inString);
+		System.out.println(result);
+	}
+
+
 }

@@ -28,11 +28,21 @@ public class NumStepsOnString implements Siso2 {
 	public String siso(String progString, String inString) throws WcbcException, IOException {
 		Universal universal = new Universal();
 		long startTime = System.nanoTime();
-		String val = universal.siso(progString, inString);
+		universal.siso(progString, inString);
 		long elapsedTime = System.nanoTime() - startTime;
 		return Long.toString(elapsedTime);
 		// we should return "no" if it doesn't halt, but of course we can't actually do
 		// that...
 	}
+
+    public static void main(String[] args) throws WcbcException, IOException {
+		utils.checkSiso2Args(args);
+		String progString = args[0];
+		String inString = args[1];
+		NumStepsOnString numStepsOnString = new NumStepsOnString();
+		String result = numStepsOnString.siso(progString, inString);
+		System.out.println(result);
+	}
+
 
 }

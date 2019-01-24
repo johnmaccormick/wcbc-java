@@ -32,4 +32,14 @@ public class AlterYesToNumChars implements Siso {
 			return "xx";
 		}
 	}
+
+    public static void main(String[] args) throws WcbcException, IOException {
+		utils.checkSisoArgs(args);
+		String inString = args[0];
+		AlterYesToNumChars alterYesToNumChars = new AlterYesToNumChars();
+		String result = alterYesToNumChars.siso(inString);
+		System.out.println(result);
+	}
+
+
 }

@@ -29,5 +29,12 @@ public class AlterYesToGAGA implements Siso {
 			return "no";
 		}
 	}
+    public static void main(String[] args) throws WcbcException, IOException {
+		utils.checkSisoArgs(args);
+		String inString = args[0];
+		AlterYesToGAGA alterYesToGAGA = new AlterYesToGAGA();
+		String result = alterYesToGAGA.siso(inString);
+		System.out.println(result);
+	}
 
 }

@@ -3,7 +3,6 @@ package wcbc;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -11,7 +10,7 @@ import org.junit.jupiter.api.Test;
 class utilsTest {
 
 	@Test
-	void readFile() throws IOException {
+	void readFile() throws IOException, WcbcException {
 		String[][] testVals = { { "geneticString.txt", "CAGTGGGGCAATT", "GCGCTCGCTCA" },
 				{ "wasteland.txt", "Here is no", "without water" }, };
 		for (String[] v : testVals) {
