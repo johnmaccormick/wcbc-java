@@ -647,3 +647,4 @@ public class utils {
 		return nextShortLex(s, asciiAlphabet);
 	}
 
+}

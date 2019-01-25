@@ -1,0 +1,6 @@
+To create a new release, make a ZIP file of:
+
+src
+test
+LICENSE
+README.txt
