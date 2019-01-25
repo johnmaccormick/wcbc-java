@@ -5,7 +5,9 @@ package wcbc;
  * 
  * Returns "yes" if the input is longer than 1000 characters and "no" otherwise.
  *
- * Example: > java wcbc/LongerThan1K abcdefghijkl
+ * Example: 
+ *
+ * > java wcbc/LongerThan1K abcdefghijkl
  *
  * no
  */

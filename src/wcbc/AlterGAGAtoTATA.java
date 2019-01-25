@@ -19,7 +19,7 @@ import java.io.IOException;
  * 
  * Example:
  * 
- * >>> java AlterGAGAtoTATA -f repeatCAorGA.java GA
+ * > java wcbc/AlterGAGAtoTATA -f repeatCAorGA.java GA
  *
  * 
  */

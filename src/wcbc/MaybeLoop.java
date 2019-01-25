@@ -8,7 +8,9 @@ package wcbc;
  * infinite loop. Otherwise, the output depends on the length L of the input. If
  * L is even, "yes" is returned, otherwise "no" is returned.
  * 
- * Example: > java wcbc/MaybeLoop "abcde secret sauce"
+ * Example: 
+ *
+ * > java wcbc/MaybeLoop "abcde secret sauce"
  *
  * yes
  * 

@@ -120,11 +120,6 @@ public class Transition {
 				+ ", writeSymbol=" + writeSymbol + ", direction=" + direction + "]";
 	}
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;

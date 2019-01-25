@@ -5,7 +5,9 @@ package wcbc;
  * 
  * Returns "yes" for all inputs.
  *
- * Example: > java wcbc/Yes asdf
+ * Example: 
+ *
+ * > java wcbc/Yes asdf
  *
  * yes
  */

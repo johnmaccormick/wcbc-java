@@ -8,7 +8,9 @@ package wcbc;
  * 
  * returns: a string consisting of M copies of the character "C".
  * 
- * Example: > java wcbc/MCopiesOfC 12
+ * Example: 
+ *
+ * > java wcbc/MCopiesOfC 12
  *
  * CCCCCCCCCCCC
  * 

@@ -16,7 +16,9 @@ import java.io.IOException;
  * sequence of node names separated by commas. If no such cycle exists, "no" is
  * returned.
  * 
- * Example: > java wcbc/Uhc "a,b b,c c,a a,d d,b"
+ * Example: 
+ *
+ * > java wcbc/Uhc "a,b b,c c,a a,d d,b"
  * 
  * "a,c,b,d"
  * 

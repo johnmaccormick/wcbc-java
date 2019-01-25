@@ -5,7 +5,9 @@ package wcbc;
  * 
  * Returns "no" for all inputs.
  *
- * Example: > java wcbc/No asdf
+ * Example: 
+ *
+ * > java wcbc/No asdf
  *
  * no
  */

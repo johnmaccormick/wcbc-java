@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
  * SISO program Universal.java
  * 
  * This is a universal Java program -- that is, a Java program that executes
- * other SISO Java programs. Given a program P and input I, universal.java
+ * other SISO Java programs. Given a program P and input I, Universal.java
  * returns P(I), provided that P(I) is defined. As an extra convenience when
  * running from the command line, if the first argument is "-f" then the
  * following argument will be interpreted as a filename whose contents should be
@@ -32,7 +32,7 @@ import java.lang.reflect.Method;
  * 
  * Example:
  * 
- * > java wcbc/universal -f containsGAGA.java CCGAGACC
+ * > java wcbc/Universal -f containsGAGA.java CCGAGACC
  * 
  * yes
  */

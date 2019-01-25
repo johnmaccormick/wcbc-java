@@ -12,7 +12,9 @@ package wcbc;
  * returns: the smallest nontrivial factor of M, or "no" if no such factor
  * exists
  * 
- * Example: > java wcbc/FactorUnary 111111111111111 
+ * Example: 
+ *
+ * > java wcbc/FactorUnary 111111111111111 
  * 
  * "3"
  * 

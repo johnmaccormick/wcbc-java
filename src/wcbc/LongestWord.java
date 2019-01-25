@@ -6,7 +6,9 @@ package wcbc;
  * Returns the longest word in the input string. Here, a "word" is a sequence of
  * characters surrounded by whitespace.
  *
- * Example: > java wcbc/LongestWord "apple banana orange"
+ * Example: 
+ *
+ * > java wcbc/LongestWord "apple banana orange"
  *
  * banana
  */

@@ -20,7 +20,7 @@ import java.io.IOException;
  * 
  * Example:
  * 
- * >>> java RecYesOnString -f containsGAGA.java GA
+ * > java wcbc/RecYesOnString -f containsGAGA.java GA
  * 
  */
 public class RecYesOnString implements Siso {

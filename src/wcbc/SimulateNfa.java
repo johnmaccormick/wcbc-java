@@ -16,7 +16,9 @@ import java.io.IOException;
  * 
  * returns: "yes" if M accepts I and "no" otherwise
  * 
- * Example: > java wcbc/SimulateNfa -f simple3.nfa AGA 
+ * Example: 
+ *
+ * > java wcbc/SimulateNfa -f simple3.nfa AGA 
  * 
  * "yes"
  * 

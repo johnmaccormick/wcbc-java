@@ -9,7 +9,9 @@ package wcbc;
  * 
  * returns: The product of the input integers.
  *
- * Example: > java wcbc/MultiplyAll "5 6 7"
+ * Example: 
+ *
+ * > java wcbc/MultiplyAll "5 6 7"
  *
  * 210
  */

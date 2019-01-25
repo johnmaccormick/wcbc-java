@@ -10,7 +10,9 @@ package wcbc;
  * 
  * returns: 'yes' if the input contains 'GAGA'. Otherwise return 'no'
  * 
- * Example: > java wcbc/ContainsGAGA CCCCCCGAGATTTATA
+ * Example: 
+ *
+ * > java wcbc/ContainsGAGA CCCCCCGAGATTTATA
  *
  * yes
  * 

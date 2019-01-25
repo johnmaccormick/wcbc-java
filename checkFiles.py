@@ -39,6 +39,30 @@ def checkHasMain(java_files):
         sys.stdout.flush()
     print('   ... finished checking main() methods')
     sys.stdout.flush()
+
+def checkUppercaseClassName(java_files):
+    print('Checking example comments capitalize class name etc...')
+    filesToCheck = java_files - set([])
+    mainStr = 'public static void main'
+    exampleString = '* Example:'
+    invocationString = '* > java wcbc/'
+    for filename in sorted(filesToCheck):
+        progString = readFile(filename)
+        if exampleString in progString:
+            if invocationString not in progString:
+                print('Warning: file', filename, 'has incorrectly formatted invocation')
+        if invocationString in progString:
+            if exampleString not in progString:
+                print('Warning: file', filename, 'has incorrectly formatted example string')
+        if invocationString in progString:
+            loc = progString.find(invocationString)
+            firstClassChar = progString[loc + len(invocationString)]
+            if not (firstClassChar.isupper() and firstClassChar.isalpha()):
+                print('Warning: file', filename, 'fails to use uppercase class name')
+        sys.stdout.flush()
+    print('   ... finished checking capitalization etc')
+    sys.stdout.flush()
+
     
 def main():
     prefix = 'src\\wcbc\\'
@@ -57,19 +81,22 @@ def main():
                            'Siso.java',
                            'Siso2.java',
                            'Siso3.java',
+                           'Transition.java',
                            'TrueInPeano.java',
                            'TwoTDCM.java',
+                           'utils.java',
                            'WaitAllTerminated.java',
                            'WcbcException.java',
     ])
     
     dont_test_files = set([prefix + f for f in dont_test_files])
-    java_files_to_test = all_java_files - dont_test_files
+    java_files_to_check = all_java_files - dont_test_files
 
     # print('all_java_files:', all_java_files)
     # print('dont_test_files:', dont_test_files)
-    # print('len(java_files_to_test)', len(java_files_to_test))
-    checkHasMain(java_files_to_test)    
+    # print('len(java_files_to_check)', len(java_files_to_check))
+    checkHasMain(java_files_to_check)    
+    checkUppercaseClassName(java_files_to_check)
     
 if __name__ == '__main__':
     main()
