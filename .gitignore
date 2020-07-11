@@ -29,5 +29,7 @@ hs_err_pid*
 # wcbc-specific
 src/wcbc/inString.txt
 src/wcbc/progString.txt
+inString.txt
+progString.txt
 src/wcbc/test.txt
 *~
